@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:24:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 15:21:35 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/16 12:31:54 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,14 @@ void	ft_free(char **strs, int j)
 
 char	**ft_token(char const *s)
 {
-	int		i;
-	int		j;
-	int		size;
-	char	**strs;
-	char	quote;
-	int		var_size;
+	char	*expanded;
+	char	var[var_size + 2];
+	char	var[var_size + 2];
 
+	int i, j, size, var_size;
+	char **strs, quote;
 	i = 0;
 	j = 0;
-	size = 0;
 	strs = (char **)malloc((ft_count_word(s) + 1) * sizeof(char *));
 	if (!strs)
 		return (NULL);
@@ -91,19 +89,56 @@ char	**ft_token(char const *s)
 		{
 			quote = s[i++];
 			size = 0;
-			while (s[i] && s[i] != quote)
+			if (quote == '\"')
 			{
-				size++;
-				i++;
+				while (s[i] && s[i] != quote)
+				{
+					if (s[i] == '$')
+					{
+						var_size = 0;
+						i++;
+						while (s[i] && (isalnum(s[i]) || s[i] == '_'))
+						{
+							var_size++;
+							i++;
+						}
+						strncpy(var, &s[i - var_size - 1], var_size + 1);
+						var[var_size + 1] = '\0';
+						expanded = expand_env_var(var);
+						if (!expanded)
+							expanded = ft_strdup("");
+						strs[j] = expanded;
+						j++;
+					}
+					else
+					{
+						strs[j] = (char *)malloc(2);
+						if (!strs[j])
+						{
+							ft_free(strs, j);
+							return (NULL);
+						}
+						strs[j][0] = s[i];
+						strs[j++][1] = '\0';
+						i++;
+					}
+				}
 			}
-			strs[j] = (char *)malloc(size + 1);
-			if (!strs[j])
+			else
 			{
-				ft_free(strs, j);
-				return (NULL);
+				while (s[i] && s[i] != quote)
+				{
+					strs[j] = (char *)malloc(2);
+					if (!strs[j])
+					{
+						ft_free(strs, j);
+						return (NULL);
+					}
+					strs[j][0] = s[i];
+					strs[j++][1] = '\0';
+					i++;
+				}
 			}
-			strncpy(strs[j], &s[i - size], size);
-			strs[j++][size] = '\0';
 			i++;
 		}
 		else if (s[i] == '$')
@@ -115,14 +150,13 @@ char	**ft_token(char const *s)
 				var_size++;
 				i++;
 			}
-			strs[j] = (char *)malloc(var_size + 1);
-			if (!strs[j])
-			{
-				ft_free(strs, j);
-				return (NULL);
-			}
-			strncpy(strs[j], &s[i - var_size], var_size);
-			strs[j++][var_size] = '\0';
+			strncpy(var, &s[i - var_size - 1], var_size + 1);
+			var[var_size + 1] = '\0';
+			expanded = expand_env_var(var);
+			if (!expanded)
+				expanded = ft_strdup("");
+			strs[j] = expanded;
+			j++;
 		}
 		else if (!isspace(s[i]) && s[i] != '|' && s[i] != '>' && s[i] != '<')
 		{

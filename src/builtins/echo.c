@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:45:33 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/16 11:39:43 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/16 12:14:46 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,16 @@
 // 		printf("\n");
 // 	return (1);
 // }
+
+char	*expand_env_var(const char *input)
+{
+	const char	*var;
+
+	var = getenv(input + 1);
+	if (!var)
+		return (ft_strdup(""));
+	return (ft_strdup(var));
+}
 
 int	ft_echo(t_node *syntax_list)
 {
