@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 15:29:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:34:07 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./builtins.h"
+#include "../../includes/builtins.h"
 
 void	handle_cd(t_node **current)
 {
@@ -31,8 +31,20 @@ void	handle_command(t_node **current)
 	else if (strcmp((*current)->value, "cd") == 0)
 		handle_cd(current);
 	else if (strcmp((*current)->value, "pwd") == 0)
+	{
 		if (!ft_pwd())
 			perror("pwd");
+	}
+	else if (strcmp((*current)->value, "export") == 0)
+	{
+		if (ft_export())
+			perror("export");
+	}
+	else if (strcmp((*current)->value, "echo") == 0)
+	{
+		if (!ft_echo(*current))
+			perror("echo");
+	}
 }
 
 void	builtins(t_node *syntax_list)

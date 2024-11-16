@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 15:26:03 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:19:19 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,12 @@
 
 typedef struct s_bash
 {
-	char			*input;
-	char			**tokens;
-}					t_bash;
+	char	*input;
+	char	**tokens;
+	char	**environ;
+	t_node	*syntax_list;
+}			t_bash;
 
-void				builtins(t_node *syntax_list);
+void		builtins(t_node *syntax_list);
 
 #endif

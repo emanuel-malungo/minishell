@@ -6,22 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 15:21:35 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:42:56 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_bash	*init_bash(void)
-{
-	t_bash	*bash;
-
-	bash = malloc(sizeof(t_bash));
-	if (!bash)
-		return (NULL);
-	ft_memset(bash, 0, sizeof(t_bash));
-	return (bash);
-}
 
 void	print_list(t_node *node)
 {
@@ -45,24 +34,34 @@ void	free_list(t_node *node)
 	}
 }
 
+t_bash	*init_bash(void)
+{
+	t_bash	*bash;
+
+	bash = malloc(sizeof(t_bash));
+	if (!bash)
+		return (NULL);
+	ft_memset(bash, 0, sizeof(t_bash));
+	return (bash);
+}
+
 int	main(void)
 {
-	char	*input;
-	char	**tokens;
-	t_node	*syntax_list;
+	t_bash	*bash;
 
+	bash = init_bash();
 	while (1)
 	{
-		input = readline("minishell$> ");
-		if (!input)
+		bash->input = readline("minishell$> ");
+		if (!bash->input)
 			break ;
-		add_history(input);
-		tokens = ft_token(input);
-		syntax_list = parse_tokens(tokens);
-		print_list(syntax_list);
-		builtins(syntax_list);
-		free_list(syntax_list);
-		free(input);
+		add_history(bash->input);
+		bash->tokens = ft_token(bash->input);
+		bash->syntax_list = parse_tokens(bash->tokens);
+		print_list(bash->syntax_list);
+		builtins(bash->syntax_list);
+		free_list(bash->syntax_list);
+		free(bash->input);
 	}
 	return (0);
 }
