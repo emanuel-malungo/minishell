@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 16:19:19 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:49:22 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/libft.h"
 # include "./builtins.h"
 # include "./parse.h"
+# include "./token.h"
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>

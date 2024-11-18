@@ -6,28 +6,24 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/16 11:34:07 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:58:37 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/builtins.h"
 
-void	handle_cd(t_node **current)
-{
-	*current = (*current)->next;
-	if (*current && strcmp((*current)->type, "argument") == 0)
-	{
-		if (!ft_cd((*current)->value))
-			perror("cd");
-	}
-	else if (!ft_cd(NULL))
-		perror("cd");
-}
+
+
 
 void	handle_command(t_node **current)
 {
+	if (!current || !*current || !(*current)->value)
+	{
+		fprintf(stderr, "Invalid node in handle_command\n");
+		return ;
+	}
 	if (strcmp((*current)->value, "exit") == 0)
-		exit(0);
+		handle_exit(current);
 	else if (strcmp((*current)->value, "cd") == 0)
 		handle_cd(current);
 	else if (strcmp((*current)->value, "pwd") == 0)
@@ -53,7 +49,7 @@ void	builtins(t_node *syntax_list)
 
 	if (!syntax_list)
 	{
-		perror("Error");
+		perror("Error: syntax_list is NULL");
 		return ;
 	}
 	current = syntax_list;
@@ -61,11 +57,13 @@ void	builtins(t_node *syntax_list)
 	{
 		if (!current->type || !current->value)
 		{
-			perror("Error");
+			perror("Error: invalid node in syntax_list");
 			return ;
 		}
 		if (strcmp(current->type, "command") == 0)
 			handle_command(&current);
+		if (!current)
+			break ;
 		current = current->next;
 	}
 }

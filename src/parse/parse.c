@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:53:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 15:21:58 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:59:24 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ t_node	*parse_tokens(char **tokens)
 	while (tokens[pos])
 	{
 		if (strcmp(tokens[pos], "|") == 0)
-			add_node(&head, "pipe", "|");
+		{
+			if (tokens[pos + 1])
+				add_node(&head, "pipe", "|");
+		}
 		else if (strcmp(tokens[pos], ">") == 0 || strcmp(tokens[pos],
 				">>") == 0)
 		{
@@ -73,9 +76,21 @@ t_node	*parse_tokens(char **tokens)
 			if (tokens[pos])
 				add_node(&head, "file", tokens[pos]);
 		}
+		else if (strcmp(tokens[pos], "1>") == 0 || strcmp(tokens[pos],
+				"2>") == 0)
+		{
+			add_node(&head, "output_redirect", tokens[pos]);
+			pos++;
+			if (tokens[pos])
+				add_node(&head, "file", tokens[pos]);
+		}
+		else if (strcmp(tokens[pos], "&&") == 0 || strcmp(tokens[pos],
+				"||") == 0)
+			add_node(&head, "logical_operator", tokens[pos]);
 		else
 		{
-			if (!head || strcmp(head->type, "command") != 0)
+			if (!head || (strcmp(head->type, "command") != 0
+					&& strcmp(head->type, "pipe") != 0))
 				add_node(&head, "command", tokens[pos]);
 			else
 				add_node(&head, "argument", tokens[pos]);

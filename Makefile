@@ -12,9 +12,12 @@ SRCS = $(SRC_DIR)/minishell.c \
        $(SRC_DIR)/builtins/cd.c \
        $(SRC_DIR)/builtins/pwd.c \
        $(SRC_DIR)/builtins/echo.c \
-	   $(SRC_DIR)/builtins/export.c \
+       $(SRC_DIR)/builtins/exit.c \
+       $(SRC_DIR)/builtins/export.c \
        $(SRC_DIR)/parse/parse.c \
-	   $(SRC_DIR)/parse/token.c 
+       $(SRC_DIR)/token/token_utils.c \
+       $(SRC_DIR)/token/handle.c \
+       $(SRC_DIR)/token/token.c 
 
 LIBFT = $(LIBFT_DIR)/libft.a
 

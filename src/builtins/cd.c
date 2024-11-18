@@ -6,11 +6,29 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:16:30 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/15 13:28:58 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/18 14:34:14 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/builtins.h"
+
+void	handle_cd(t_node **current)
+{
+	if (!current || !*current)
+	{
+		perror("Invalid node in handle_cd\n");
+		return ;
+	}
+	*current = (*current)->next;
+	if (*current && (*current)->type && strcmp((*current)->type,
+			"argument") == 0)
+	{
+		if (!ft_cd((*current)->value))
+			perror("cd");
+	}
+	else if (!ft_cd(NULL))
+		perror("cd");
+}
 
 int	ft_cd(const char *path)
 {
@@ -40,3 +58,4 @@ int	ft_cd(const char *path)
 	free(cwd);
 	return (1);
 }
+
