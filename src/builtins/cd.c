@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:16:30 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 14:34:14 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/19 08:36:10 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	handle_cd(t_node **current)
 			perror("cd");
 	}
 	else if (!ft_cd(NULL))
+	{
 		perror("cd");
+		return ;
+	}
 }
 
 int	ft_cd(const char *path)

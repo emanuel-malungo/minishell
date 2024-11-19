@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 14:58:37 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/19 08:49:53 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_command(t_node **current)
 {
 	if (!current || !*current || !(*current)->value)
 	{
-		fprintf(stderr, "Invalid node in handle_command\n");
+		perror("Invalid node in handle_command\n");
 		return ;
 	}
 	if (strcmp((*current)->value, "exit") == 0)

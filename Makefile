@@ -8,6 +8,7 @@ INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)/include
 CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
 
 SRCS = $(SRC_DIR)/minishell.c \
+       $(SRC_DIR)/utils.c \
        $(SRC_DIR)/builtins/builtins.c \
        $(SRC_DIR)/builtins/cd.c \
        $(SRC_DIR)/builtins/pwd.c \

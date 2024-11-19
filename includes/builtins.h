@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:27:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 14:58:42 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:21:10 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,24 @@ typedef struct s_node
 	struct s_node	*next;
 }					t_node;
 
-typedef struct s_env
+typedef struct s_env_node
 {
-	char			*value;
 	char			*name;
-}					t_env;
+	char			*value;
+	struct s_env	*next;
+}					t_env_node;
 
 # include "./minishell.h"
 
 int					ft_pwd(void);
 int					ft_export(void);
+int					ft_cd(const char *path);
 char				**ft_token(char const *s);
-void				handle_exit(t_node **current);
 void				handle_cd(t_node **current);
 t_node				*parse_tokens(char **tokens);
-void				builtins(t_node *syntax_list);
-int					ft_cd(const char *path);
-void				handle_command(t_node **current);
 int					ft_echo(t_node *syntax_list);
+void				builtins(t_node *syntax_list);
+void				handle_exit(t_node **current);
+void				handle_command(t_node **current);
 
 #endif
