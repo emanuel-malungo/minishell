@@ -6,33 +6,33 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/19 10:24:26 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:23:46 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
-# include "./builtins.h"
-# include "./parse.h"
-# include "./token.h"
-# include <dirent.h>
+# include <term.h>
+# include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
-# include <limits.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 # include <signal.h>
-# include <stdio.h>
+# include <limits.h>
 # include <stdlib.h>
+# include "./parse.h"
+# include <dirent.h>
+# include <unistd.h>
 # include <string.h>
+# include "./token.h"
+# include <termios.h>
+# include <sys/wait.h>
 # include <sys/stat.h>
 # include <sys/types.h>
-# include <sys/wait.h>
-# include <term.h>
-# include <termios.h>
-# include <unistd.h>
+# include "./builtins.h"
+# include "../libft/libft.h"
+# include <readline/history.h>
+# include <readline/readline.h>
 
 typedef struct s_bash
 {
