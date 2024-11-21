@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:45:33 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 12:01:40 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:56:03 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*expand_env_var(const char *input)
 {
 	const char	*var;
 
-	var = getenv(input + 1);
+	var = getenv(input);
 	if (!var)
 		return (ft_strdup(""));
 	return (ft_strdup(var));

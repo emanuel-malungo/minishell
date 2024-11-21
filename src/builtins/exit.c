@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 15:03:51 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:33:21 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ int	is_digit(const char c)
 		return (1);
 	return (0);
 }
+
 int	count_args(t_node *current)
 {
 	t_node	*temp;
 	int		count;
+	int		i;
 
+	i = -1;
 	count = 0;
 	temp = current;
 	while (temp)
@@ -30,7 +33,7 @@ int	count_args(t_node *current)
 		if (strcmp(temp->type, "argument") == 0)
 		{
 			count++;
-			for (int i = 0; temp->value[i]; i++)
+			while (temp->value[++i])
 			{
 				if (!is_digit(temp->value[i]) && !(i == 0
 						&& temp->value[i] == '-'))

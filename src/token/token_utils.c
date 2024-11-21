@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:35:27 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 12:23:09 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:48:25 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	check_is(char c, int j)
 	else if (j == 2)
 		return (c == ' ');
 	else if (j == 3)
-		return (c == '|' || c == '>' || c == '<' || c == '&' || c == ';');
-	else if (j == 4)
 	{
 		return (c != ' ' && c != '|' && c != '>' && c != '<' && c != '$'
 			&& c != '&' && c != ';' && c != '\'' && c != '\"');
@@ -30,51 +28,57 @@ int	check_is(char c, int j)
 	return (0);
 }
 
-int	count_word(char const *str)
+void	process_token(const char *input, int *i, int *count)
 {
-	int		i;
-	int		c;
-	int		check_quotes;
-	char	quote_type;
+	char	quote;
+
+	if (input[*i] == '\'' || input[*i] == '\"')
+	{
+		quote = input[(*i)++];
+		while (input[*i] && input[*i] != quote)
+			(*i)++;
+		if (input[*i])
+			(*i)++;
+		(*count)++;
+	}
+	else if (input[*i] == '$')
+	{
+		(*i)++;
+		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+			(*i)++;
+		(*count)++;
+	}
+	else if (check_is(input[*i], 3))
+	{
+		while (input[*i] && check_is(input[*i], 3))
+			(*i)++;
+		(*count)++;
+	}
+}
+
+int	count_word(const char *input)
+{
+	int	i;
+	int	count;
 
 	i = 0;
-	c = 0;
-	check_quotes = 0;
-	quote_type = 0;
-	while (str[i])
+	count = 0;
+	while (input[i])
 	{
-		if (check_is(str[i], 1) && (!check_quotes || str[i] == quote_type))
-		{
-			if (!check_quotes)
-				quote_type = str[i];
-			check_quotes = !check_quotes;
+		while (input[i] && input[i] == ' ')
 			i++;
-			continue ;
-		}
-		if (!check_quotes && !check_is(str[i], 2) && !check_is(str[i], 0))
+		if (!input[i])
+			break ;
+		if (check_is(input[i], 0))
 		{
-			c++;
-			while (str[i] && !check_is(str[i], 2) && !check_is(str[i], 0))
-			{
-				if (check_is(str[i], 1))
-					break ;
+			while (input[i] && check_is(input[i], 0))
 				i++;
-			}
-		}
-		else if (!check_quotes && check_is(str[i], 0))
-		{
-			c++;
-			if ((str[i] == '>' || str[i] == '<' || str[i] == '&') && str[i
-				+ 1] == str[i])
-				i++;
-			i++;
+			count++;
 		}
 		else
-			i++;
+			process_token(input, &i, &count);
 	}
-	if (check_quotes)
-		return (-1);
-	return (c);
+	return (count);
 }
 
 int	wordsize(char const *str, int i)

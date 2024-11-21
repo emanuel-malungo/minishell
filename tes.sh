@@ -7,15 +7,19 @@ test_command() {
     echo "-----------------------------------------------------"
 }
 
-# Limpeza (opcional)
+# Limpeza de arquivos temporários
+cleanup() {
+    rm -f output.txt error.txt output1.txt output2.txt pipe_output.txt output_with_quotes.txt user.txt
+}
+
+# Limpeza inicial
 clear
+cleanup
 
 # Exemplo de comandos para testar
 echo "Iniciando testes no minishell..."
 
 # Comandos básicos
-
-# Comando simples de echo
 test_command "echo Hello, World!"
 
 # Comando simples com variáveis de ambiente
@@ -60,12 +64,6 @@ test_command "echo Hello | grep Hello"
 test_command "echo Hello | grep Hello > pipe_output.txt"
 test_command "cat pipe_output.txt"
 
-# Testando comandos com operadores lógicos (&&)
-test_command "echo Hello && echo World"
-
-# Testando comandos com operadores lógicos (||)
-test_command "false_command || echo Comando falhou, mas echo funciona"
-
 # Testando comando com variáveis dentro de comandos
 export PATH="/usr/bin:/bin"
 test_command "echo \$PATH"
@@ -73,9 +71,6 @@ test_command "echo \$PATH"
 # Testando comandos com variáveis de ambiente
 test_command "echo \$SHELL"
 test_command "echo \$HOME"
-
-# Testando comandos com subshell (parênteses)
-test_command "(echo Inside Subshell)"
 
 # Testando a execução de múltiplos comandos (sequência de comandos)
 test_command "echo First command; echo Second command; echo Third command"
@@ -109,5 +104,8 @@ EOF"
 
 # Testando comando de execução de fundo (background process)
 test_command "sleep 1 &"
+
+# Limpeza final
+cleanup
 
 echo "Testes concluídos!"

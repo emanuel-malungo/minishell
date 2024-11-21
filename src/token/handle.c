@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:09:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/19 16:25:51 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:16:42 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	handle_quote_token(t_tokenizer *token)
 	char	quote;
 	int		size;
 
-	quote = token->input[token->i++];
 	size = 0;
+	quote = token->input[token->i++];
 	while (token->input[token->i] && token->input[token->i] != quote)
 	{
 		size++;
@@ -35,54 +35,28 @@ void	handle_quote_token(t_tokenizer *token)
 		free_tokenizer(token);
 		return ;
 	}
-	strncpy(token->tokens[token->j], &token->input[token->i - size], size);
+	ft_strlcpy(token->tokens[token->j], &token->input[token->i - size], size + 1);
 	token->tokens[token->j][size] = '\0';
 	token->j++;
 	token->i++;
 }
 
-// void	handle_env_variable(t_tokenizer *token)
-// {
-// 	int		var_size;
-// 	char	var;
-// 	char	*expanded;
-
-// 	var_size = 0;
-// 	token->i++;
-// 	while (isalnum(token->input[token->i]) || token->input[token->i] == '_')
-// 	{
-// 		var_size++;
-// 		token->i++;
-// 	}
-// 	var[var_size] = '\0';
-// 	strncpy(var, &token->input[token->i - var_size], var_size);
-// 	expanded = expand_env_var(var);
-// 	if (!expanded)
-// 		expanded = strdup("");
-// 	token->tokens[token->j] = expanded;
-// 	token->j++;
-// }
-
 void handle_env_variable(t_tokenizer *tokenizer)
 {
     int var_size = 0;
 
-    tokenizer->i++; // Avança para o caractere após `$`
-    while (isalnum(tokenizer->input[tokenizer->i]) || tokenizer->input[tokenizer->i] == '_')
+    tokenizer->i++;
+    while (ft_isalnum(tokenizer->input[tokenizer->i]) || tokenizer->input[tokenizer->i] == '_')
     {
         var_size++;
         tokenizer->i++;
     }
-
-    // Copia o nome da variável
     char var[var_size + 1];
-    strncpy(var, &tokenizer->input[tokenizer->i - var_size], var_size);
+    ft_strlcpy(var, &tokenizer->input[tokenizer->i - var_size], var_size + 1);
     var[var_size] = '\0';
-
-    // Expande a variável de ambiente
     char *expanded = expand_env_var(var);
     if (!expanded)
-        expanded = strdup("");
+        expanded = ft_strdup("");
 
     tokenizer->tokens[tokenizer->j] = expanded;
     tokenizer->j++;
@@ -99,7 +73,7 @@ void	handle_word_token(t_tokenizer *token)
 		free_tokenizer(token);
 		return ;
 	}
-	strncpy(token->tokens[token->j], &token->input[token->i], size);
+	ft_strlcpy(token->tokens[token->j], &token->input[token->i], size + 1);
 	token->tokens[token->j][size] = '\0';
 	token->j++;
 	token->i += size;

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:00:52 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 12:48:08 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:24:50 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define PARSE_H
 
 # include "./minishell.h"
-
-
 
 int		ft_count_word(char const *s);
 char	**ft_token(char const *s);

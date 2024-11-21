@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:53:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/19 16:35:10 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:15:49 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,56 +46,74 @@ void	add_node(t_node **head, char *type, char *value)
 	}
 }
 
-t_node	*parse_tokens(char **tokens)
+int	ft_strcmp(char *s1, char *s2)
 {
-	t_node	*head;
-	int		pos;
+	int	i;
 
-	head = NULL;
-	pos = 0;
-	while (tokens[pos])
-	{
-		if (strcmp(tokens[pos], "|") == 0)
-		{
-			if (tokens[pos + 1])
-				add_node(&head, "pipe", "|");
-		}
-		else if (strcmp(tokens[pos], ">") == 0 || strcmp(tokens[pos],
-				">>") == 0)
-		{
-			add_node(&head, "output_redirect", tokens[pos]);
-			pos++;
-			if (tokens[pos])
-				add_node(&head, "file", tokens[pos]);
-		}
-		else if (strcmp(tokens[pos], "<") == 0 || strcmp(tokens[pos],
-				"<<") == 0)
-		{
-			add_node(&head, "input_redirect", tokens[pos]);
-			pos++;
-			if (tokens[pos])
-				add_node(&head, "file", tokens[pos]);
-		}
-		else if (strcmp(tokens[pos], "1>") == 0 || strcmp(tokens[pos],
-				"2>") == 0)
-		{
-			add_node(&head, "output_redirect", tokens[pos]);
-			pos++;
-			if (tokens[pos])
-				add_node(&head, "file", tokens[pos]);
-		}
-		else if (strcmp(tokens[pos], "&&") == 0 || strcmp(tokens[pos],
-				"||") == 0)
-			add_node(&head, "logical_operator", tokens[pos]);
-		else
-		{
-			if (!head || (strcmp(head->type, "command") != 0
-					&& strcmp(head->type, "pipe") != 0))
-				add_node(&head, "command", tokens[pos]);
-			else
-				add_node(&head, "argument", tokens[pos]);
-		}
-		pos++;
-	}
-	return (head);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }
+
+t_node *parse_tokens(char **tokens)
+{
+    t_node *head = NULL;
+    int i = 0;
+    int after_pipe = 0;
+
+    while (tokens[i])
+    {
+        if (ft_strcmp(tokens[i], "|") == 0)
+        {
+            if (tokens[i + 1])
+                add_node(&head, "pipe", "|");
+            after_pipe = 1;
+        }
+        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+        {
+            add_node(&head, "output_redirect", tokens[i]);
+            i++;
+            if (tokens[i])
+                add_node(&head, "file", tokens[i]);
+        }
+        else if (ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i], "<<") == 0)
+        {
+            add_node(&head, "input_redirect", tokens[i]);
+            i++;
+            if (tokens[i])
+                add_node(&head, "file", tokens[i]);
+        }
+        else if (ft_strcmp(tokens[i], "1>") == 0 || ft_strcmp(tokens[i], "2>") == 0)
+        {
+            add_node(&head, "output_redirect", tokens[i]);
+            i++;
+            if (tokens[i])
+                add_node(&head, "file", tokens[i]);
+        }
+        else
+        {
+            if (after_pipe)
+            {
+                add_node(&head, "command", tokens[i]);
+                after_pipe = 0;
+            }
+            else
+            {
+                if (!head || (ft_strcmp(head->type, "command") != 0
+                    && ft_strcmp(head->type, "pipe") != 0))
+                {
+                    add_node(&head, "command", tokens[i]);
+                }
+                else
+                {
+                    add_node(&head, "argument", tokens[i]);
+                }
+            }
+        }
+        i++;
+    }
+    return (head);
+}
+
+

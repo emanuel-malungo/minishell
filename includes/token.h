@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 10:57:50 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/18 12:30:05 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:21:12 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ typedef struct s_tokenizer
 	int			j;
 	int			word_count;
 	char		**tokens;
-	int			quote_state;
-	char		quote_type;
 }				t_tokenizer;
 
 t_tokenizer		*init_tokenizer(char const *input);
@@ -33,8 +31,9 @@ int				is_word_char(char c);
 int				is_operator(char c);
 char			**tokenizer(char const *s);
 int				check_is(char c, int j);
-int				count_word(char const *str);
+int				count_word(const char *input);
 int				wordsize(char const *str, int i);
+void			handle_quote_double(t_tokenizer *token);
 void			handle_quote_token(t_tokenizer *token);
 void			handle_env_variable(t_tokenizer *token);
 void			handle_word_token(t_tokenizer *token);
