@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:35:27 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:48:25 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:57:39 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,20 @@ int	check_is(char c, int j)
 	return (0);
 }
 
-void	process_token(const char *input, int *i, int *count)
+int	wordsize(const char *str, int i)
+{
+	int size;
+
+	size = 0;
+	while (str[i] && !check_is(str[i], 2) && !check_is(str[i], 0))
+	{
+		size++;
+		i++;
+	}
+	return (size);
+}
+
+static void	process_token(const char *input, int *i, int *count)
 {
 	char	quote;
 
@@ -79,17 +92,4 @@ int	count_word(const char *input)
 			process_token(input, &i, &count);
 	}
 	return (count);
-}
-
-int	wordsize(char const *str, int i)
-{
-	int size;
-
-	size = 0;
-	while (str[i] && !check_is(str[i], 2) && !check_is(str[i], 0))
-	{
-		size++;
-		i++;
-	}
-	return (size);
 }

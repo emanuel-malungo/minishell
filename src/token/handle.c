@@ -6,13 +6,13 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:09:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:16:42 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:40:06 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/token.h"
+#include "../../includes/minishell.h"
 
-void	handle_quote_token(t_tokenizer *token)
+void	handle_quote_simples(t_tokenizer *token)
 {
 	char	quote;
 	int		size;
@@ -40,6 +40,65 @@ void	handle_quote_token(t_tokenizer *token)
 	token->j++;
 	token->i++;
 }
+void handle_quote_double(t_tokenizer *token)
+{
+    char quote = '\"';
+    int size = 0;
+    char *expanded;
+    int i = token->i;
+
+    while (token->input[i] && token->input[i] != quote)
+    {
+        if (token->input[i] == '$' && token->input[i + 1] != '\"')
+        {
+            i++;
+            
+            int var_len = 0;
+            while (isalnum(token->input[i + var_len]) || token->input[i + var_len] == '_')
+                var_len++;
+
+            if (var_len > 0)
+            {
+                char *env_var = malloc(var_len + 1);
+                if (!env_var)
+                    return;
+                strncpy(env_var, &token->input[i], var_len);
+                env_var[var_len] = '\0';
+                expanded = expand_env_var(env_var);
+                free(env_var);
+
+                if (!expanded)
+                    expanded = ft_strdup(""); 
+                char *new_token = realloc(token->tokens[token->j], size + strlen(expanded) + 1);
+                if (!new_token)
+                {
+                    free(expanded);
+                    return; 
+                }
+                token->tokens[token->j] = new_token;
+                strcat(token->tokens[token->j], expanded);
+                size += strlen(expanded);
+                free(expanded);
+
+                i += var_len - 1;
+            }
+        }
+        else
+        {
+            size++;
+            i++;
+        }
+    }
+    if (token->input[i] != quote)
+    {
+        free_tokenizer(token);
+        return;
+    }
+    token->i = i + 1; 
+}
+
+
+
 
 void handle_env_variable(t_tokenizer *tokenizer)
 {

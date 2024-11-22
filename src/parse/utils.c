@@ -6,16 +6,9 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:26:13 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/16 12:14:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 07:24:09 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "../../includes/minishell.h"
 
-int	ft_isspace(const char s)
-{
-	if (s == ' ' || s == '\t' || s == '\n' || s == '\v' || s == '\f'
-		|| s == '\r')
-		return (1);
-	return (0);
-}

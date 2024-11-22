@@ -6,17 +6,17 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:27:38 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:28:07 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "../../includes/minishell.h"
 
-void	handle_command(t_node **current)
+void	handle_command(t_node **current, t_env_node *env_list)
 {
 	if (!current || !*current || !(*current)->value)
 	{
-		perror("Invalid node in handle_command\n");
+		fprintf(stderr, "Error: invalid node in handle_command\n");
 		return ;
 	}
 	if (strcmp((*current)->value, "exit") == 0)
@@ -29,24 +29,32 @@ void	handle_command(t_node **current)
 			perror("pwd");
 	}
 	else if (strcmp((*current)->value, "export") == 0)
+		handle_export((*current)->next, &env_list);
+	else if (strcmp((*current)->value, "unset") == 0)
 	{
-		if (ft_export())
-			perror("export");
+		if ((*current)->next && (*current)->next->value)
+			ft_unset(&env_list, (*current)->next->value);
+		else
+			fprintf(stderr, "unset: not enough arguments\n");
 	}
-	else if (strcmp((*current)->value, "echo") == 0)
+    else if (strcmp((*current)->value, "echo") == 0)
 	{
 		if (!ft_echo(*current))
 			perror("echo");
 	}
+	else if (strcmp((*current)->value, "env") == 0)
+		ft_env(env_list);
+	else
+		fprintf(stderr, "Unknown command: %s\n", (*current)->value);
 }
 
-void	builtins(t_node *syntax_list)
+void	builtins(t_node *syntax_list, t_env_node *env_list)
 {
 	t_node	*current;
 
 	if (!syntax_list)
 	{
-		perror("Error: syntax_list is NULL");
+		perror("Error: syntax_list is NULL\n");
 		return ;
 	}
 	current = syntax_list;
@@ -54,13 +62,11 @@ void	builtins(t_node *syntax_list)
 	{
 		if (!current->type || !current->value)
 		{
-			perror("Error: invalid node in syntax_list");
+			perror("Error: invalid node in syntax_list\n");
 			return ;
 		}
-		if (strcmp(current->type, "command") == 0)
-			handle_command(&current);
-		if (!current)
-			break ;
+		if (ft_strcmp(current->type, "command") == 0)
+			handle_command(&current, env_list);
 		current = current->next;
 	}
 }

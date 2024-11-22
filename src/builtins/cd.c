@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:16:30 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:28:21 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 07:23:16 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "../../includes/minishell.h"
 
 void	handle_cd(t_node **current)
 {

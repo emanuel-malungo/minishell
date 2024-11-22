@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:24:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:48:49 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:36:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parse.h"
+#include "../../includes/minishell.h"
 
 void	ft_free(char **strs, int j)
 {
@@ -62,8 +62,10 @@ char	**tokenizer(char const *s)
 	{
 		while (token->input[token->i] == ' ')
 			token->i++;
-		if (check_is(token->input[token->i], 1))
-			handle_quote_token(token);
+		if (token->input[token->i] == '\'')
+			handle_quote_simples(token);
+		else if (token->input[token->i] == '\"')
+			handle_quote_double(token);
 		else if (token->input[token->i] == '$')
 			handle_env_variable(token);
 		else if (check_is(token->input[token->i], 3))

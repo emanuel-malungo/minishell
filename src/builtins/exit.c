@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:33:21 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 07:23:39 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "../../includes/minishell.h"
 
 int	is_digit(const char c)
 {

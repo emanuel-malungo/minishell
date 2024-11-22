@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 09:00:52 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 08:24:50 by emalungo         ###   ########.fr       */
+/*   Created: 2024/11/21 16:30:58 by emalungo          #+#    #+#             */
+/*   Updated: 2024/11/22 08:04:56 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#include "../../includes/minishell.h"
 
-# include "./minishell.h"
+void	ft_env(t_env_node *env_list)
+{
+	t_env_node	*current;
 
-int		ft_count_word(char const *s);
-char	**ft_token(char const *s);
-int		ft_isspace(const char s);
-void	ft_free(char **strs, int j);
-int		ft_wordsize(char const *str, int i);
-char	*expand_env_var(const char *input);
-
-#endif
+	if (!env_list)
+	{
+		perror("env: no environment variables found\n");
+		return ;
+	}
+	current = env_list;
+	while (current)
+	{
+		if (current->value)
+			printf("%s=%s\n", current->name, current->value);
+		else
+			printf("%s\n", current->name);
+		current = current->next;
+	}
+}

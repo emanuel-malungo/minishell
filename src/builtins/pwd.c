@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:58:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/19 08:48:38 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 07:23:51 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "../../includes/minishell.h"
 
 int	ft_pwd(void)
 {

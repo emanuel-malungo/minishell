@@ -13,6 +13,8 @@ SRCS = $(SRC_DIR)/minishell.c \
        $(SRC_DIR)/builtins/cd.c \
        $(SRC_DIR)/builtins/pwd.c \
        $(SRC_DIR)/builtins/echo.c \
+       $(SRC_DIR)/builtins/unset.c \
+       $(SRC_DIR)/builtins/env.c \
        $(SRC_DIR)/builtins/exit.c \
        $(SRC_DIR)/builtins/export.c \
        $(SRC_DIR)/parse/parse.c \

@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:45:33 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/20 14:56:03 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:38:08 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/builtins.h"
+#include "../../includes/minishell.h"
 
 char	*expand_env_var(const char *input)
 {
