@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 08:38:02 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 16:01:27 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void			handle_operator_token(t_tokenizer *token);
 // ********************************************************** ./SRC/PARSE
 
 int				ft_count_word(char const *s);
-char			**ft_token(char const *s);
+// char			**ft_token(char const *s);
 int				ft_isspace(const char s);
 void			ft_free(char **strs, int j);
 int				ft_wordsize(char const *str, int i);
@@ -77,7 +77,7 @@ char			*expand_env_var(const char *input);
 
 int				ft_pwd(void);
 int				ft_cd(const char *path);
-char			**ft_token(char const *s);
+// char			**ft_token(char const *s);
 void			handle_cd(t_node **current);
 t_node			*parse_tokens(char **tokens);
 int				ft_echo(t_node *syntax_list);
@@ -88,5 +88,7 @@ void			ft_export(t_env_node **env_list, char *name, char *value);
 void			handle_command(t_node **current, t_env_node *env_list);
 void			builtins(t_node *syntax_list, t_env_node *env_list);
 void			handle_export(t_node *current, t_env_node **env_list);
+
+void execute_external_command(t_node *command_node, t_env_node *env_list);
 
 #endif

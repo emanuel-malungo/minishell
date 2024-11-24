@@ -20,7 +20,8 @@ SRCS = $(SRC_DIR)/minishell.c \
        $(SRC_DIR)/parse/parse.c \
        $(SRC_DIR)/token/token_utils.c \
        $(SRC_DIR)/token/handle.c \
-       $(SRC_DIR)/token/token.c 
+       $(SRC_DIR)/token/token.c \
+       $(SRC_DIR)/exec/exec_cmd.c 
 
 LIBFT = $(LIBFT_DIR)/libft.a
 

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:45:33 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 08:38:08 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/24 14:38:45 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_echo(t_node *syntax_list)
 
 	current = syntax_list->next;
 	line = 1;
-	if (current && strcmp(current->value, "-n") == 0)
+	if (current && ft_strcmp(current->value, "-n") == 0)
 	{
 		line = 0;
 		current = current->next;

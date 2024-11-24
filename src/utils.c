@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 08:41:14 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:56:57 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void	free_list(t_node *node)
 	}
 }
 
-void free_env_list(t_env_node *env_list)
+void	free_env_list(t_env_node *env_list)
 {
-	t_env_node *temp;
+	t_env_node	*temp;
 
 	while (env_list)
 	{
@@ -47,7 +47,6 @@ void free_env_list(t_env_node *env_list)
 		free(temp);
 	}
 }
-
 
 void	fill_env_list(char **env, t_env_node **env_list)
 {
@@ -66,14 +65,14 @@ void	fill_env_list(char **env, t_env_node **env_list)
 		if (!new_node)
 		{
 			perror("malloc failed");
-			return;
+			return ;
 		}
 		env_copy = strdup(env[i]);
 		if (!env_copy)
 		{
 			perror("strdup failed");
 			free(new_node);
-			return;
+			return ;
 		}
 		name = strtok(env_copy, "=");
 		value = strtok(NULL, "=");
@@ -92,11 +91,9 @@ void	fill_env_list(char **env, t_env_node **env_list)
 			free(new_node->name);
 			free(new_node->value);
 			free(new_node);
-			return;
+			return ;
 		}
-
 		new_node->next = NULL;
-
 		if (*env_list == NULL)
 		{
 			*env_list = new_node;
@@ -108,15 +105,14 @@ void	fill_env_list(char **env, t_env_node **env_list)
 				temp = temp->next;
 			temp->next = new_node;
 		}
-
 		i++;
 	}
 }
 
 t_bash	*init_bash(void)
 {
-	t_bash	*bash;
-	extern char **environ;
+	t_bash		*bash;
+	extern char	**environ;
 
 	bash = malloc(sizeof(t_bash));
 	if (!bash)
@@ -124,22 +120,13 @@ t_bash	*init_bash(void)
 		perror("malloc failed");
 		return (NULL);
 	}
-
 	ft_memset(bash, 0, sizeof(t_bash));
-
 	if (!environ || !*environ)
 	{
 		perror("Environment is empty or NULL");
 		bash->env_list = NULL;
-		return bash;
+		return (bash);
 	}
-
 	fill_env_list(environ, &bash->env_list);
-	return bash;
+	return (bash);
 }
-
-
-
-
-
-

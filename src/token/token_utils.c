@@ -6,26 +6,22 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:35:27 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/21 15:57:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/24 14:28:04 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	check_is(char c, int j)
-{
-	if (j == 0)
-		return (c == '|' || c == '>' || c == '<' || c == '&' || c == ';');
-	else if (j == 1)
-		return (c == '\"' || c == '\'');
-	else if (j == 2)
-		return (c == ' ');
-	else if (j == 3)
-	{
-		return (c != ' ' && c != '|' && c != '>' && c != '<' && c != '$'
-			&& c != '&' && c != ';' && c != '\'' && c != '\"');
-	}
-	return (0);
+int check_is(char c, int j) {
+    if (j == 0)
+        return (c == '|' || c == '>' || c == '<');
+    else if (j == 1)
+        return (c == '\"' || c == '\'');
+    else if (j == 2)
+        return (c == ' ');
+    else if (j == 3)
+        return (c != ' ' && c != '|' && c != '>' && c != '<' && c);
+    return 0;
 }
 
 int	wordsize(const char *str, int i)

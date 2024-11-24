@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:53:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 07:24:03 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/24 14:29:39 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,18 @@ t_node *parse_tokens(char **tokens)
     {
         if (ft_strcmp(tokens[i], "|") == 0)
         {
-            if (tokens[i + 1])
-                add_node(&head, "pipe", "|");
+            add_node(&head, "pipe", tokens[i]);
             after_pipe = 1;
         }
-        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0 ||
+                 ft_strcmp(tokens[i], "1>") == 0 || ft_strcmp(tokens[i], "2>") == 0)
         {
             add_node(&head, "output_redirect", tokens[i]);
             i++;
             if (tokens[i])
                 add_node(&head, "file", tokens[i]);
+            else
+                add_node(&head, "error", "Missing file for output redirection");
         }
         else if (ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i], "<<") == 0)
         {
@@ -83,13 +85,8 @@ t_node *parse_tokens(char **tokens)
             i++;
             if (tokens[i])
                 add_node(&head, "file", tokens[i]);
-        }
-        else if (ft_strcmp(tokens[i], "1>") == 0 || ft_strcmp(tokens[i], "2>") == 0)
-        {
-            add_node(&head, "output_redirect", tokens[i]);
-            i++;
-            if (tokens[i])
-                add_node(&head, "file", tokens[i]);
+            else
+                add_node(&head, "error", "Missing file for input redirection");
         }
         else
         {
@@ -101,7 +98,7 @@ t_node *parse_tokens(char **tokens)
             else
             {
                 if (!head || (ft_strcmp(head->type, "command") != 0
-                    && ft_strcmp(head->type, "pipe") != 0))
+                              && ft_strcmp(head->type, "pipe") != 0))
                 {
                     add_node(&head, "command", tokens[i]);
                 }
@@ -113,7 +110,5 @@ t_node *parse_tokens(char **tokens)
         }
         i++;
     }
-    return (head);
+    return head;
 }
-
-
