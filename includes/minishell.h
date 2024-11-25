@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 16:01:27 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:40:17 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,19 @@ int				ft_strcmp(char *s1, char *s2);
 
 // ********************************************************** ./SRC/TOKEN
 
-t_tokenizer		*init_tokenizer(char const *input);
+
+char			**tokenizer(char const *s, t_env_node *env_list);
 void			ft_free(char **strs, int j);
 void			free_tokenizer(t_tokenizer *tokenizer);
 int				is_word_char(char c);
 int				is_operator(char c);
-char			**tokenizer(char const *s);
 int				check_is(char c, int j);
 int				count_word(const char *input);
 int				wordsize(char const *str, int i);
-void			handle_quote_double(t_tokenizer *token);
+void			handle_quote_double(t_tokenizer *token, t_env_node *env_list);
 void			handle_quote_simples(t_tokenizer *token);
-void			handle_env_variable(t_tokenizer *token);
+void			handle_env_variable(t_tokenizer *tokenizer,
+					t_env_node *env_list);
 void			handle_word_token(t_tokenizer *token);
 void			handle_operator_token(t_tokenizer *token);
 
@@ -77,7 +78,6 @@ char			*expand_env_var(const char *input);
 
 int				ft_pwd(void);
 int				ft_cd(const char *path);
-// char			**ft_token(char const *s);
 void			handle_cd(t_node **current);
 t_node			*parse_tokens(char **tokens);
 int				ft_echo(t_node *syntax_list);
@@ -89,6 +89,7 @@ void			handle_command(t_node **current, t_env_node *env_list);
 void			builtins(t_node *syntax_list, t_env_node *env_list);
 void			handle_export(t_node *current, t_env_node **env_list);
 
-void execute_external_command(t_node *command_node, t_env_node *env_list);
+void			execute_external_command(t_node *command_node,
+					t_env_node *env_list);
 
 #endif

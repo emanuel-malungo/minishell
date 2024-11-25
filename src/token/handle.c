@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:09:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/24 14:10:36 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:38:36 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,47 +33,69 @@ void handle_quote_simples(t_tokenizer *token) {
     token->i++;
 }
 
+// void handle_quote_double(t_tokenizer *token) {
+//     char quote = '\"';
+//     char *expanded_token = malloc(1);
+//     if (!expanded_token)
+//         return;
+//     expanded_token[0] = '\0';
 
-// void	handle_quote_simples(t_tokenizer *token)
-// {
-// 	char	quote;
-// 	int		size;
-
-// 	size = 0;
-// 	quote = token->input[token->i++];
-// 	while (token->input[token->i] && token->input[token->i] != quote)
-// 	{
-// 		size++;
-// 		token->i++;
-// 	}
-// 	if (token->input[token->i] != quote)
-// 	{
-// 		free_tokenizer(token);
-// 		return ;
-// 	}
-// 	token->tokens[token->j] = malloc(size + 1);
-// 	if (!token->tokens[token->j])
-// 	{
-// 		free_tokenizer(token);
-// 		return ;
-// 	}
-// 	strncpy(token->tokens[token->j], &token->input[token->i - size], size);
-// 	token->tokens[token->j][size] = '\0';
-// 	token->j++;
-// 	token->i++;
+//     token->i++;
+//     while (token->input[token->i] && token->input[token->i] != quote) {
+//         if (token->input[token->i] == '$') {
+//             handle_env_variable(token);
+//         } else {
+//             int len = strlen(expanded_token);
+//             expanded_token = realloc(expanded_token, len + 2);
+//             if (!expanded_token)
+//                 return;
+//             expanded_token[len] = token->input[token->i];
+//             expanded_token[len + 1] = '\0';
+//         }
+//         token->i++;
+//     }
+//     if (!token->input[token->i]) { // Aspas não fechadas
+//         free(expanded_token);
+//         return;
+//     }
+//     token->tokens[token->j++] = expanded_token;
+//     token->i++;
 // }
 
-void handle_quote_double(t_tokenizer *token) {
+// void handle_env_variable(t_tokenizer *tokenizer)
+// {
+//     int var_size = 0;
+
+//     tokenizer->i++;
+//     while (ft_isalnum(tokenizer->input[tokenizer->i]) || tokenizer->input[tokenizer->i] == '_')
+//     {
+//         var_size++;
+//         tokenizer->i++;
+//     }
+//     char var[var_size + 1];
+//     strncpy(var, &tokenizer->input[tokenizer->i - var_size], var_size);
+//     var[var_size] = '\0';
+//     char *expanded = expand_env_var(var);
+//     if (!expanded)
+//         expanded = ft_strdup("");
+
+//     tokenizer->tokens[tokenizer->j] = expanded;
+//     tokenizer->j++;
+// }
+
+void handle_quote_double(t_tokenizer *token, t_env_node *env_list) {
     char quote = '\"';
     char *expanded_token = malloc(1);
     if (!expanded_token)
         return;
     expanded_token[0] = '\0';
 
-    token->i++;
+    token->i++; // Pular o primeiro caractere de aspas
+
     while (token->input[token->i] && token->input[token->i] != quote) {
         if (token->input[token->i] == '$') {
-            handle_env_variable(token); // Expande variável e adiciona ao token
+            // Se encontrar um '$', expanda a variável de ambiente
+            handle_env_variable(token, env_list);
         } else {
             int len = strlen(expanded_token);
             expanded_token = realloc(expanded_token, len + 2);
@@ -84,93 +106,59 @@ void handle_quote_double(t_tokenizer *token) {
         }
         token->i++;
     }
+
     if (!token->input[token->i]) { // Aspas não fechadas
         free(expanded_token);
         return;
     }
+
     token->tokens[token->j++] = expanded_token;
-    token->i++;
+    token->i++; // Pular o caractere de aspas de fechamento
 }
 
 
-
-// void handle_quote_double(t_tokenizer *token)
-// {
-//     char quote = '\"';
-//     int size = 0;
-//     char *expanded;
-//     int i = token->i;
-
-//     while (token->input[i] && token->input[i] != quote)
-//     {
-//         if (token->input[i] == '$' && token->input[i + 1] != '\"')
-//         {
-//             i++;
-            
-//             int var_len = 0;
-//             while (isalnum(token->input[i + var_len]) || token->input[i + var_len] == '_')
-//                 var_len++;
-
-//             if (var_len > 0)
-//             {
-//                 char *env_var = malloc(var_len + 1);
-//                 if (!env_var)
-//                     return;
-//                 strncpy(env_var, &token->input[i], var_len);
-//                 env_var[var_len] = '\0';
-//                 expanded = expand_env_var(env_var);
-//                 free(env_var);
-
-//                 if (!expanded)
-//                     expanded = ft_strdup(""); 
-//                 char *new_token = realloc(token->tokens[token->j], size + strlen(expanded) + 1);
-//                 if (!new_token)
-//                 {
-//                     free(expanded);
-//                     return; 
-//                 }
-//                 token->tokens[token->j] = new_token;
-//                 strcat(token->tokens[token->j], expanded);
-//                 size += strlen(expanded);
-//                 free(expanded);
-
-//                 i += var_len - 1;
-//             }
-//         }
-//         else
-//         {
-//             size++;
-//             i++;
-//         }
-//     }
-//     if (token->input[i] != quote)
-//     {
-//         free_tokenizer(token);
-//         return;
-//     }
-//     token->i = i + 1; 
-// }
-
-void handle_env_variable(t_tokenizer *tokenizer)
+void handle_env_variable(t_tokenizer *tokenizer, t_env_node *env_list)
 {
     int var_size = 0;
 
-    tokenizer->i++;
-    while (ft_isalnum(tokenizer->input[tokenizer->i]) || tokenizer->input[tokenizer->i] == '_')
-    {
+    tokenizer->i++; // Pular o '$'
+
+    // Determina o tamanho da variável (sequência de caracteres alfanuméricos ou '_')
+    while (ft_isalnum(tokenizer->input[tokenizer->i]) || tokenizer->input[tokenizer->i] == '_') {
         var_size++;
         tokenizer->i++;
     }
+
+    // Se nenhuma variável foi encontrada, simplesmente retorne
+    if (var_size == 0) return;
+
+    // Extrair o nome da variável
     char var[var_size + 1];
     strncpy(var, &tokenizer->input[tokenizer->i - var_size], var_size);
     var[var_size] = '\0';
-    char *expanded = expand_env_var(var);
-    if (!expanded)
-        expanded = ft_strdup("");
 
+    // Buscar a variável no env_list
+    t_env_node *current = env_list;
+    char *expanded = NULL;
+    while (current) {
+        if (strcmp(current->name, var) == 0) {
+            // Se a variável for encontrada, pega o valor
+            expanded = strdup(current->value);
+            break;
+        }
+        current = current->next;
+    }
+
+    // Se não encontrar a variável, use uma string vazia
+    if (!expanded) {
+        expanded = ft_strdup("");
+    }
+
+    // Armazenar o valor expandido no array de tokens
     tokenizer->tokens[tokenizer->j] = expanded;
     tokenizer->j++;
 }
+
 
 void	handle_word_token(t_tokenizer *token)
 {
