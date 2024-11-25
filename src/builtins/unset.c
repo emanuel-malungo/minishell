@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 15:24:10 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 08:07:33 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:13:18 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_unset(t_env_node **env_list, char *name)
 	prev = NULL;
 	while (current)
 	{
-		if (strcmp(current->name, name) == 0)
+		if (ft_strcmp(current->name, name) == 0)
 		{
 			if (prev)
 				prev->next = current->next;

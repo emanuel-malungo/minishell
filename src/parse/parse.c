@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:53:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/24 14:29:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 08:40:17 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_node	*new_node(char *type, char *value)
 	if (!node)
 		return (NULL);
 	node->type = type;
-	node->value = strdup(value);
+	node->value = ft_strdup(value);
 	node->next = NULL;
 	return (node);
 }
@@ -32,16 +32,12 @@ void	add_node(t_node **head, char *type, char *value)
 
 	new = new_node(type, value);
 	if (!*head)
-	{
 		*head = new;
-	}
 	else
 	{
 		temp = *head;
 		while (temp->next)
-		{
 			temp = temp->next;
-		}
 		temp->next = new;
 	}
 }
@@ -69,8 +65,7 @@ t_node *parse_tokens(char **tokens)
             add_node(&head, "pipe", tokens[i]);
             after_pipe = 1;
         }
-        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0 ||
-                 ft_strcmp(tokens[i], "1>") == 0 || ft_strcmp(tokens[i], "2>") == 0)
+        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
         {
             add_node(&head, "output_redirect", tokens[i]);
             i++;
@@ -110,5 +105,5 @@ t_node *parse_tokens(char **tokens)
         }
         i++;
     }
-    return head;
+    return (head);
 }

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:42:17 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 08:03:49 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:18:44 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ void	handle_export(t_node *current, t_env_node **env_list)
 	char		*name;
 	char		*value;
 	char		*equal_sign;
-	t_env_node	*env;
+	t_env_node	*temp;
 
 	if (!current || !current->value)
 	{
-		env = *env_list;
-		while (env)
+		temp = *env_list;
+		while (temp)
 		{
-			if (env->value)
-				printf("declare -x %s=\"%s\"\n", env->name, env->value);
+			if (temp->value)
+				printf("declare -x %s=\"%s\"\n", temp->name, temp->value);
 			else
-				printf("declare -x %s\n", env->name);
-			env = env->next;
+				printf("declare -x %s\n", temp->name);
+			temp = temp->next;
 		}
 		return ;
 	}
@@ -61,14 +61,16 @@ void	handle_export(t_node *current, t_env_node **env_list)
 	}
 }
 
+
 void	ft_export(t_env_node **env_list, char *name, char *value)
 {
 	t_env_node	*current;
+	t_env_node	*prev;
 	t_env_node	*new_node;
 
 	if (!name || strlen(name) == 0)
 	{
-		fprintf(stderr, "export: invalid variable name\n");
+		perror("export: invalid variable name\n");
 		return ;
 	}
 	current = *env_list;
@@ -93,8 +95,24 @@ void	ft_export(t_env_node **env_list, char *name, char *value)
 		perror("Error: memory allocation failed");
 		return ;
 	}
-	new_node->name = ft_strdup(name);
-	new_node->value = ft_strdup(value);
-	new_node->next = *env_list;
-	*env_list = new_node;
+	new_node->name = strdup(name);
+	new_node->value = strdup(value);
+	new_node->next = NULL;
+	if (!*env_list || ft_strcmp(name, (*env_list)->name) < 0)
+	{
+		new_node->next = *env_list;
+		*env_list = new_node;
+	}
+	else
+	{
+		current = *env_list;
+		while (current && ft_strcmp(name, current->name) > 0)
+		{
+			prev = current;
+			current = current->next;
+		}
+		prev->next = new_node;
+		new_node->next = current;
+	}
 }
+

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:45:33 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/24 14:38:45 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 08:21:52 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_echo(t_node *syntax_list)
 	}
 	while (current)
 	{
-		if (current->value)
+		if (current->value && ft_strcmp(current->type, "argument") == 0)
 		{
 			printf("%s", current->value);
 			if (current->next)

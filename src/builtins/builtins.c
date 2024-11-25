@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/24 14:11:04 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/25 09:03:58 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@ void handle_command(t_node **current, t_env_node *env_list)
 {
     if (!current || !*current || !(*current)->value)
     {
-        fprintf(stderr, "Error: invalid node in handle_command\n");
+        perror("Error: invalid node in handle_command\n");
         return ;
     }
-
     if (strcmp((*current)->value, "exit") == 0)
         handle_exit(current);
     else if (strcmp((*current)->value, "cd") == 0)
