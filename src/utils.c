@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/25 10:03:13 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:57:46 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,66 +48,6 @@ void	free_env_list(t_env_node *env_list)
 	}
 }
 
-// void	fill_env_list(char **env, t_env_node **env_list)
-// {
-// 	t_env_node	*new_node;
-// 	t_env_node	*temp;
-// 	int			i;
-// 	char		*name;
-// 	char		*value;
-// 	char		*env_copy;
-
-// 	*env_list = NULL;
-// 	i = 0;
-// 	while (env[i])
-// 	{
-// 		new_node = malloc(sizeof(t_env_node));
-// 		if (!new_node)
-// 		{
-// 			perror("malloc failed");
-// 			return ;
-// 		}
-// 		env_copy = strdup(env[i]);
-// 		if (!env_copy)
-// 		{
-// 			perror("strdup failed");
-// 			free(new_node);
-// 			return ;
-// 		}
-// 		name = strtok(env_copy, "=");
-// 		value = strtok(NULL, "=");
-// 		if (name)
-// 			new_node->name = strdup(name);
-// 		else
-// 			new_node->name = strdup("");
-// 		if (value)
-// 			new_node->value = strdup(value);
-// 		else
-// 			new_node->value = strdup("");
-// 		free(env_copy);
-// 		if (!new_node->name || !new_node->value)
-// 		{
-// 			perror("strdup failed");
-// 			free(new_node->name);
-// 			free(new_node->value);
-// 			free(new_node);
-// 			return ;
-// 		}
-// 		new_node->next = NULL;
-// 		if (*env_list == NULL)
-// 		{
-// 			*env_list = new_node;
-// 		}
-// 		else
-// 		{
-// 			temp = *env_list;
-// 			while (temp->next)
-// 				temp = temp->next;
-// 			temp->next = new_node;
-// 		}
-// 		i++;
-// 	}
-// }
 
 void	fill_env_list(char **env, t_env_node **env_list)
 {

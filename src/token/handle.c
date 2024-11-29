@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:09:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/25 10:38:36 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:24:15 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,55 +33,6 @@ void handle_quote_simples(t_tokenizer *token) {
     token->i++;
 }
 
-// void handle_quote_double(t_tokenizer *token) {
-//     char quote = '\"';
-//     char *expanded_token = malloc(1);
-//     if (!expanded_token)
-//         return;
-//     expanded_token[0] = '\0';
-
-//     token->i++;
-//     while (token->input[token->i] && token->input[token->i] != quote) {
-//         if (token->input[token->i] == '$') {
-//             handle_env_variable(token);
-//         } else {
-//             int len = strlen(expanded_token);
-//             expanded_token = realloc(expanded_token, len + 2);
-//             if (!expanded_token)
-//                 return;
-//             expanded_token[len] = token->input[token->i];
-//             expanded_token[len + 1] = '\0';
-//         }
-//         token->i++;
-//     }
-//     if (!token->input[token->i]) { // Aspas não fechadas
-//         free(expanded_token);
-//         return;
-//     }
-//     token->tokens[token->j++] = expanded_token;
-//     token->i++;
-// }
-
-// void handle_env_variable(t_tokenizer *tokenizer)
-// {
-//     int var_size = 0;
-
-//     tokenizer->i++;
-//     while (ft_isalnum(tokenizer->input[tokenizer->i]) || tokenizer->input[tokenizer->i] == '_')
-//     {
-//         var_size++;
-//         tokenizer->i++;
-//     }
-//     char var[var_size + 1];
-//     strncpy(var, &tokenizer->input[tokenizer->i - var_size], var_size);
-//     var[var_size] = '\0';
-//     char *expanded = expand_env_var(var);
-//     if (!expanded)
-//         expanded = ft_strdup("");
-
-//     tokenizer->tokens[tokenizer->j] = expanded;
-//     tokenizer->j++;
-// }
 
 void handle_quote_double(t_tokenizer *token, t_env_node *env_list) {
     char quote = '\"';

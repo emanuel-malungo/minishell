@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:24:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/25 10:34:25 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:18:54 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,34 @@ t_tokenizer	*init_tokenizer(char const *input)
 	return (token);
 }
 
+// char **tokenizer(char const *s, t_env_node *env_list) {
+//     t_tokenizer *token;
+//     char **result;
+
+//     token = init_tokenizer(s);
+//     while (token->input[token->i]) {
+//         while (token->input[token->i] == ' ') // Ignorar espaços
+//             token->i++;
+//         if (!token->input[token->i]) // Se fim da entrada, sair
+//             break;
+//         if (token->input[token->i] == '\'') // Aspas simples
+//             handle_quote_simples(token);
+//         else if (token->input[token->i] == '\"') // Aspas duplas
+//             handle_quote_double(token, env_list);
+//         else if (token->input[token->i] == '$') // Variáveis de ambiente
+//             handle_env_variable(token, env_list);
+//         else if (check_is(token->input[token->i], 3)) // Palavra
+//             handle_word_token(token);
+//         else if (check_is(token->input[token->i], 0)) // Operador
+//             handle_operator_token(token);
+//         else
+//             token->i++;
+//     }
+//     token->tokens[token->j] = NULL;
+//     result = token->tokens;
+//     return result;
+// }
+
 char **tokenizer(char const *s, t_env_node *env_list) {
     t_tokenizer *token;
     char **result;
@@ -68,12 +96,8 @@ char **tokenizer(char const *s, t_env_node *env_list) {
             handle_quote_double(token, env_list);
         else if (token->input[token->i] == '$') // Variáveis de ambiente
             handle_env_variable(token, env_list);
-        else if (check_is(token->input[token->i], 3)) // Palavra
-            handle_word_token(token);
-        else if (check_is(token->input[token->i], 0)) // Operador
-            handle_operator_token(token);
         else
-            token->i++;
+            handle_word_token(token); // Palavra ou operador
     }
     token->tokens[token->j] = NULL;
     result = token->tokens;
