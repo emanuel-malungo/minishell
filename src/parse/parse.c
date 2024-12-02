@@ -6,104 +6,84 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:53:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/29 12:57:36 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:09:09 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_node	*new_node(char *type, char *value)
+static void	handle_output_redirect(char **tokens, int *i, t_node **head)
 {
-	t_node	*node;
-
-	node = (t_node *)malloc(sizeof(t_node));
-	if (!node)
-		return (NULL);
-	node->type = type;
-	node->value = ft_strdup(value);
-	node->next = NULL;
-	return (node);
+	add_node(head, "output_redirect", tokens[*i]);
+	(*i)++;
+	if (tokens[*i])
+		add_node(head, "file", tokens[*i]);
+	else
+		add_node(head, "error", "Missing file for output redirection");
 }
 
-void	add_node(t_node **head, char *type, char *value)
+static void	handle_input_redirect(char **tokens, int *i, t_node **head)
 {
-	t_node	*new;
-	t_node	*temp;
+	add_node(head, "input_redirect", tokens[*i]);
+	(*i)++;
+	if (tokens[*i])
+		add_node(head, "file", tokens[*i]);
+	else
+		add_node(head, "error", "Missing file for input redirection");
+}
 
-	new = new_node(type, value);
-	if (!*head)
-		*head = new;
+static void	handle_pipe(char **tokens, int *i, t_node **head, int *after_pipe)
+{
+	add_node(head, "pipe", tokens[*i]);
+	*after_pipe = 1;
+}
+
+static void	handle_command_or_argument(char **tokens, int *i, t_node **head,
+		int *after_pipe)
+{
+	if (*after_pipe)
+	{
+		add_node(head, "command", tokens[*i]);
+		*after_pipe = 0;
+	}
 	else
 	{
-		temp = *head;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new;
+		if (!*head || (strcmp((*head)->type, "command") != 0
+				&& strcmp((*head)->type, "pipe") != 0))
+		{
+			add_node(head, "command", tokens[*i]);
+		}
+		else
+		{
+			add_node(head, "argument", tokens[*i]);
+		}
 	}
 }
 
-int	ft_strcmp(char *s1, char *s2)
+
+
+t_node	*parse_tokens(char **tokens)
 {
-	int	i;
+	t_node	*head;
+	int		i;
+	int		after_pipe;
 
 	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
+	head = NULL;
+	after_pipe = 0;
+	while (tokens[i])
+	{
+		if (ft_strcmp(tokens[i], "|") == 0)
+			handle_pipe(tokens, &i, &head, &after_pipe);
+		else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i],
+				">>") == 0)
+			handle_output_redirect(tokens, &i, &head);
+		else if (ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i],
+				"<<") == 0)
+			handle_input_redirect(tokens, &i, &head);
+		else
+			handle_command_or_argument(tokens, &i, &head, &after_pipe);
 		i++;
-	return (s1[i] - s2[i]);
-}
-
-t_node *parse_tokens(char **tokens)
-{
-    t_node *head = NULL;
-    int i = 0;
-    int after_pipe = 0;
-
-    while (tokens[i])
-    {
-        if (ft_strcmp(tokens[i], "|") == 0)
-        {
-            add_node(&head, "pipe", tokens[i]);
-            after_pipe = 1;
-        }
-        else if (ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
-        {
-            add_node(&head, "output_redirect", tokens[i]);
-            i++;
-            if (tokens[i])
-                add_node(&head, "file", tokens[i]);
-            else
-                add_node(&head, "error", "Missing file for output redirection");
-        }
-        else if (ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i], "<<") == 0)
-        {
-            add_node(&head, "input_redirect", tokens[i]);
-            i++;
-            if (tokens[i])
-                add_node(&head, "file", tokens[i]);
-            else
-                add_node(&head, "error", "Missing file for input redirection");
-        }
-        else
-        {
-            if (after_pipe)
-            {
-                add_node(&head, "command", tokens[i]);
-                after_pipe = 0;
-            }
-            else
-            {
-                if (!head || (ft_strcmp(head->type, "command") != 0
-                              && ft_strcmp(head->type, "pipe") != 0))
-                {
-                    add_node(&head, "command", tokens[i]);
-                }
-                else
-                {
-                    add_node(&head, "argument", tokens[i]);
-                }
-            }
-        }
-        i++;
-    }
-    return (head);
+	}
+	return (head);
 }

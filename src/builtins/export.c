@@ -6,11 +6,30 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:42:17 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/25 10:18:44 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:12:59 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*ft_strndup(const char *s, size_t n)
+{
+	char	*str;
+	size_t	i;
+	size_t	len;
+
+	i = -1;
+	len = ft_strlen(s);
+	if (n > len)
+		n = len;
+	str = (char *)malloc(n + 1);
+	if (str == NULL)
+		return (NULL);
+	while (++i < n)
+		str[i] = s[i];
+	str[n] = '\0';
+	return (str);
+}
 
 void	handle_export(t_node *current, t_env_node **env_list)
 {
@@ -32,11 +51,11 @@ void	handle_export(t_node *current, t_env_node **env_list)
 		}
 		return ;
 	}
-	equal_sign = strchr(current->value, '=');
+	equal_sign = ft_strchr(current->value, '=');
 	if (equal_sign)
 	{
-		name = strndup(current->value, equal_sign - current->value);
-		value = strdup(equal_sign + 1);
+		name = ft_strndup(current->value, equal_sign - current->value);
+		value = ft_strdup(equal_sign + 1);
 		if (!name || !value)
 		{
 			perror("Error: memory allocation failed");
@@ -61,14 +80,13 @@ void	handle_export(t_node *current, t_env_node **env_list)
 	}
 }
 
-
 void	ft_export(t_env_node **env_list, char *name, char *value)
 {
 	t_env_node	*current;
 	t_env_node	*prev;
 	t_env_node	*new_node;
 
-	if (!name || strlen(name) == 0)
+	if (!name || ft_strlen(name) == 0)
 	{
 		perror("export: invalid variable name\n");
 		return ;
@@ -95,8 +113,8 @@ void	ft_export(t_env_node **env_list, char *name, char *value)
 		perror("Error: memory allocation failed");
 		return ;
 	}
-	new_node->name = strdup(name);
-	new_node->value = strdup(value);
+	new_node->name = ft_strdup(name);
+	new_node->value = ft_strdup(value);
 	new_node->next = NULL;
 	if (!*env_list || ft_strcmp(name, (*env_list)->name) < 0)
 	{
@@ -115,4 +133,3 @@ void	ft_export(t_env_node **env_list, char *name, char *value)
 		new_node->next = current;
 	}
 }
-

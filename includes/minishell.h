@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/29 12:57:30 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:45:41 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,55 +40,53 @@ typedef struct s_bash
 	t_node		*syntax_list;
 }				t_bash;
 
-// ********************************************************** ./SRC/MINISHELL.C/ UTILS.C
-
-t_bash			*init_bash(void);
-void			free_list(t_node *node);
-void			print_list(t_node *node);
-int				ft_strcmp(char *s1, char *s2);
-
 // ********************************************************** ./SRC/TOKEN
 
-
-char			**tokenizer(char const *s, t_env_node *env_list);
-void			ft_free(char **strs, int j);
-void			free_tokenizer(t_tokenizer *tokenizer);
+char			**tokenizer(char const *s);
 int				is_word_char(char c);
-int				is_operator(char c);
 int				check_is(char c, int j);
-int				count_word(const char *input);
-int				wordsize(char const *str, int i);
-void			handle_quote_double(t_tokenizer *token, t_env_node *env_list);
-void			handle_quote_simples(t_tokenizer *token);
-void			handle_env_variable(t_tokenizer *tokenizer,
-					t_env_node *env_list);
 void			handle_word_token(t_tokenizer *token);
+void			handle_quote_token(t_tokenizer *token);
+int				wordsize(char const *str, int i);
 void			handle_operator_token(t_tokenizer *token);
 
 // ********************************************************** ./SRC/PARSE
 
-int				ft_count_word(char const *s);
-// char			**ft_token(char const *s);
-int				ft_isspace(const char s);
 void			ft_free(char **strs, int j);
-int				ft_wordsize(char const *str, int i);
+t_node			*parse_tokens(char **tokens);
+int				ft_isspace(const char s);
 char			*expand_env_var(const char *input);
+int				ft_count_word(char const *s);
+int				ft_wordsize(char const *str, int i);
 
 // ********************************************************** ./SRC/BUILTINS
 
 int				ft_pwd(void);
-int				ft_cd(const char *path);
 void			handle_cd(t_node **current);
-t_node			*parse_tokens(char **tokens);
-int				ft_echo(t_node *syntax_list);
-void			handle_exit(t_node **current);
-void			ft_unset(t_env_node **env_list, char *name);
 void			ft_env(t_env_node *env_list);
-void			ft_export(t_env_node **env_list, char *name, char *value);
-void			handle_command(t_node **current, t_env_node *env_list);
-void			builtins(t_node *syntax_list, t_env_node *env_list);
+void			handle_exit(t_node **current);
+int				ft_cd(const char *path);
+int				ft_echo(t_node *syntax_list);
+void			ft_unset(t_env_node **env_list, char *name);
+void			exec_all_commands(t_node *syntax_list, t_env_node *env_list);
 void			handle_export(t_node *current, t_env_node **env_list);
+void			handle_command(t_node **current, t_env_node *env_list);
+void			ft_export(t_env_node **env_list, char *name, char *value);
 
+// ********************************************************** ./SRC/UTILS
+t_bash			*init_bash(void);
+void			free_list(t_node *node);
+void			print_list(t_node *node);
+char			*expand_input(char *input, t_env_node *env_list);
+void			fill_env_list(char **env, t_env_node **env_list);
+int				ft_strcmp(char *s1, char *s2);
+char			*get_env_value(const char *var, t_env_node *env_list);
+
+// ********************************************************** ./SRC/EXEC
+char			**convert_env_list_to_array(t_env_node *env_list);
+void			add_node(t_node **head, char *type, char *value);
+char			*resolve_command_path(const char *command,
+					t_env_node *env_list);
 void			execute_external_command(t_node *command_node,
 					t_env_node *env_list);
 

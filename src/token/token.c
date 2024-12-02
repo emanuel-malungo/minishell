@@ -6,29 +6,66 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:24:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/29 12:18:54 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:24:08 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_free(char **strs, int j)
+static void	process_token(const char *input, int *i, int *count)
 {
-	while (j-- > 0)
-		free(strs[j]);
-	free(strs);
+	char	quote;
+
+	if (input[*i] == '\'' || input[*i] == '\"')
+	{
+		quote = input[(*i)++];
+		while (input[*i] && input[*i] != quote)
+			(*i)++;
+		if (input[*i])
+			(*i)++;
+		(*count)++;
+	}
+	else if (input[*i] == '$')
+	{
+		(*i)++;
+		while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+			(*i)++;
+		(*count)++;
+	}
+	else if (check_is(input[*i], 3))
+	{
+		while (input[*i] && check_is(input[*i], 3))
+			(*i)++;
+		(*count)++;
+	}
 }
 
-void	free_tokenizer(t_tokenizer *token)
+static int	count_word(const char *input)
 {
-	if (!token)
-		return ;
-	if (token->tokens)
-		ft_free(token->tokens, token->j);
-	free(token);
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (input[i])
+	{
+		while (input[i] && input[i] == ' ')
+			i++;
+		if (!input[i])
+			break ;
+		if (check_is(input[i], 0))
+		{
+			while (input[i] && check_is(input[i], 0))
+				i++;
+			count++;
+		}
+		else
+			process_token(input, &i, &count);
+	}
+	return (count);
 }
 
-t_tokenizer	*init_tokenizer(char const *input)
+static t_tokenizer	*init_tokenizer(const char *input)
 {
 	t_tokenizer	*token;
 
@@ -52,54 +89,42 @@ t_tokenizer	*init_tokenizer(char const *input)
 	return (token);
 }
 
-// char **tokenizer(char const *s, t_env_node *env_list) {
-//     t_tokenizer *token;
-//     char **result;
+int	check_is(char c, int j)
+{
+	if (j == 0)
+		return (c == '|' || c == '>' || c == '<');
+	else if (j == 1)
+		return (c == '\"' || c == '\'');
+	else if (j == 2)
+		return (c == ' ');
+	else if (j == 3)
+		return (c != ' ' && c != '|' && c != '>' && c != '<' && c);
+	return (0);
+}
 
-//     token = init_tokenizer(s);
-//     while (token->input[token->i]) {
-//         while (token->input[token->i] == ' ') // Ignorar espaços
-//             token->i++;
-//         if (!token->input[token->i]) // Se fim da entrada, sair
-//             break;
-//         if (token->input[token->i] == '\'') // Aspas simples
-//             handle_quote_simples(token);
-//         else if (token->input[token->i] == '\"') // Aspas duplas
-//             handle_quote_double(token, env_list);
-//         else if (token->input[token->i] == '$') // Variáveis de ambiente
-//             handle_env_variable(token, env_list);
-//         else if (check_is(token->input[token->i], 3)) // Palavra
-//             handle_word_token(token);
-//         else if (check_is(token->input[token->i], 0)) // Operador
-//             handle_operator_token(token);
-//         else
-//             token->i++;
-//     }
-//     token->tokens[token->j] = NULL;
-//     result = token->tokens;
-//     return result;
-// }
+char	**tokenizer(char const *s)
+{
+	t_tokenizer	*token;
+	char		**result;
 
-char **tokenizer(char const *s, t_env_node *env_list) {
-    t_tokenizer *token;
-    char **result;
-
-    token = init_tokenizer(s);
-    while (token->input[token->i]) {
-        while (token->input[token->i] == ' ') // Ignorar espaços
-            token->i++;
-        if (!token->input[token->i]) // Se fim da entrada, sair
-            break;
-        if (token->input[token->i] == '\'') // Aspas simples
-            handle_quote_simples(token);
-        else if (token->input[token->i] == '\"') // Aspas duplas
-            handle_quote_double(token, env_list);
-        else if (token->input[token->i] == '$') // Variáveis de ambiente
-            handle_env_variable(token, env_list);
-        else
-            handle_word_token(token); // Palavra ou operador
-    }
-    token->tokens[token->j] = NULL;
-    result = token->tokens;
-    return result;
+	token = init_tokenizer(s);
+	if (!token)
+		return (NULL);
+	while (token->input[token->i])
+	{
+		while (token->input[token->i] == ' ')
+			token->i++;
+		if (!token->input[token->i])
+			break ;
+		if (token->input[token->i] == '\'' || token->input[token->i] == '\"')
+			handle_quote_token(token);
+		else if (check_is(token->input[token->i], 0))
+			handle_operator_token(token);
+		else if (check_is(token->input[token->i], 3))
+			handle_word_token(token);
+	}
+	token->tokens[token->j] = NULL;
+	result = token->tokens;
+	free(token);
+	return (result);
 }

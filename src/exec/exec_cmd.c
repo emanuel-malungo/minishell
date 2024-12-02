@@ -6,142 +6,103 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:39 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 15:16:21 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:50:58 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// Função para converter a lista de variáveis de ambiente (env_list) em um vetor de strings
-char **convert_env_list_to_array(t_env_node *env_list)
+static int	count_args(t_node *arg_node)
 {
-    int count = 0;
-    t_env_node *tmp = env_list;
+	int	count;
 
-    // Contar quantas variáveis de ambiente há
-    while (tmp)
-    {
-        count++;
-        tmp = tmp->next;
-    }
-
-    // Alocar memória para o vetor de strings
-    char **envp = malloc(sizeof(char *) * (count + 1));
-    if (!envp)
-    {
-        perror("malloc");
-        return NULL;
-    }
-
-    // Preencher o vetor com as variáveis de ambiente
-    int i = 0;
-    tmp = env_list;
-    while (tmp)
-    {
-        envp[i] = malloc(strlen(tmp->name) + strlen(tmp->value) + 2); // +1 para '=' e +1 para '\0'
-        if (!envp[i])
-        {
-            perror("malloc");
-            return NULL;
-        }
-        sprintf(envp[i], "%s=%s", tmp->name, tmp->value);
-        tmp = tmp->next;
-        i++;
-    }
-
-    envp[i] = NULL;  // O último elemento deve ser NULL
-    return envp;
+	count = 0;
+	while (arg_node)
+	{
+		count++;
+		arg_node = arg_node->next;
+	}
+	return (count);
 }
 
-// Função para executar comandos externos
-void execute_external_command(t_node *command_node, t_env_node *env_list)
+static char	**prepare_argv(t_node *command_node)
 {
-    char *path_env = getenv("PATH");
-    if (!path_env)
-    {
-        printf("Error: PATH variable not found\n");
-        return;
-    }
+	t_node	*arg_node;
+	char	**argv;
+	int		arg_count;
+	int		i;
 
-    char **directories = ft_split(path_env, ':');
-    if (!directories)
-    {
-        perror("Error splitting PATH");
-        return;
-    }
+	arg_count = count_args(command_node->next);
+	argv = malloc(sizeof(char *) * (arg_count + 2));
+	if (!argv)
+		return (NULL);
+	argv[0] = command_node->value;
+	arg_node = command_node->next;
+	i = 1;
+	while (arg_node)
+	{
+		argv[i] = arg_node->value;
+		arg_node = arg_node->next;
+		i++;
+	}
+	argv[arg_count + 1] = NULL;
+	return (argv);
+}
 
-    char *command = command_node->value;
-    char *command_path = NULL;
+static char	*resolve_path(char *command, t_env_node *env_list)
+{
+	if (command[0] == '/' || (command[0] == '.' && command[1] == '/'))
+	{
+		if (access(command, X_OK) == 0)
+			return (command);
+		return (NULL);
+	}
+	return (resolve_command_path(command, env_list));
+}
 
-    for (int i = 0; directories[i]; i++)
-    {
-        command_path = malloc(strlen(directories[i]) + strlen(command) + 2);
-        if (!command_path)
-        {
-            perror("malloc");
-            return;
-        }
-        sprintf(command_path, "%s/%s", directories[i], command);
-        if (access(command_path, X_OK) == 0)
-            break;
-        free(command_path);
-        command_path = NULL;
-    }
-    if (command_path)
-    {
-        int arg_count = 0;
-        t_node *arg_node = command_node->next;
-        while (arg_node)
-        {
-            arg_count++;
-            arg_node = arg_node->next;
-        }
-        char **argv = malloc(sizeof(char *) * (arg_count + 2));
-        if (!argv)
-        {
-            perror("malloc");
-            free(command_path);
-            return;
-        }
-        argv[0] = command;
-        arg_node = command_node->next;
-        int i = 1;
-        while (arg_node)
-        {
-            argv[i++] = arg_node->value;
-            arg_node = arg_node->next;
-        }
-        argv[i] = NULL;
-        char **envp = convert_env_list_to_array(env_list);
-        pid_t pid = fork();
-        if (pid == -1)
-        {
-            perror("fork");
-            free(command_path);
-            free(envp);
-            free(argv);
-            return;
-        }
-        if (pid == 0)
-        {
-            if (execve(command_path, argv, envp) == -1)
-            {
-                perror("execve");
-                free(command_path);
-                free(envp);
-                free(argv);
-                exit(1);
-            }
-        }
-        else
-            waitpid(pid, NULL, 0);
-        free(command_path);
-        free(envp);
-        free(argv);
-    }
-    else
-        printf("%s: Command not found\n", command);
-    for (int i = 0; directories[i]; i++)
-        free(directories[i]);
-    free(directories);
+static void	execute_command(t_command_exec *exec_data, char *resolved_path)
+{
+	exec_data->pid = fork();
+	if (exec_data->pid == -1)
+		return ;
+	if (exec_data->pid == 0)
+	{
+		if (execve(resolved_path, exec_data->argv, exec_data->envp) == -1)
+		{
+			perror("execve failed");
+			exit(1);
+		}
+	}
+	else
+		waitpid(exec_data->pid, NULL, 0);
+}
+
+void	execute_external_command(t_node *command_node, t_env_node *env_list)
+{
+	t_command_exec	exec_data;
+	char			*resolved_path;
+
+	exec_data.command = command_node->value;
+	exec_data.argv = prepare_argv(command_node);
+	if (!exec_data.argv)
+		return ;
+	exec_data.envp = convert_env_list_to_array(env_list);
+	if (!exec_data.envp)
+	{
+		free(exec_data.argv);
+		return ;
+	}
+	resolved_path = resolve_path(exec_data.command, env_list);
+	if (!resolved_path)
+	{
+		printf("%s: Command not found\n", exec_data.command);
+		free(exec_data.argv);
+		free(exec_data.envp);
+		return ;
+	}
+	execute_command(&exec_data, resolved_path);
+	free(exec_data.argv);
+	free(exec_data.envp);
+	if (resolved_path != exec_data.command)
+		free(resolved_path);
 }

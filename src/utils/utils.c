@@ -6,116 +6,87 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/29 12:57:46 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:30:23 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_list(t_node *node)
+void	add_node_sorted(t_env_node **head, t_env_node *new_node)
 {
-	while (node)
+	t_env_node	*current;
+	t_env_node	*prev;
+
+	if (!*head || strcmp(new_node->name, (*head)->name) < 0)
 	{
-		printf("Node type: %s, value: %s\n", node->type, node->value);
-		node = node->next;
+		new_node->next = *head;
+		*head = new_node;
+		return ;
 	}
+	current = *head;
+	prev = NULL;
+	while (current && strcmp(new_node->name, current->name) > 0)
+	{
+		prev = current;
+		current = current->next;
+	}
+	prev->next = new_node;
+	new_node->next = current;
 }
 
-void	free_list(t_node *node)
+t_env_node	*create_env_node(char *name, char *value)
 {
-	t_node	*temp;
+	t_env_node	*new_node;
 
-	while (node)
+	new_node = malloc(sizeof(t_env_node));
+	if (name)
+		new_node->name = strdup(name);
+	else
+		new_node->name = strdup("");
+	if (value)
+		new_node->value = strdup(value);
+	else
+		new_node->value = strdup("");
+	new_node->next = NULL;
+	if (!new_node->name || !new_node->value)
 	{
-		temp = node;
-		node = node->next;
-		free(temp->value);
-		free(temp);
+		perror("strdup failed");
+		free(new_node->name);
+		free(new_node->value);
+		free(new_node);
+		return (NULL);
 	}
+	return (new_node);
 }
-
-void	free_env_list(t_env_node *env_list)
-{
-	t_env_node	*temp;
-
-	while (env_list)
-	{
-		temp = env_list;
-		env_list = env_list->next;
-		free(temp->name);
-		free(temp->value);
-		free(temp);
-	}
-}
-
 
 void	fill_env_list(char **env, t_env_node **env_list)
 {
 	t_env_node	*new_node;
-	t_env_node	*current;
-	t_env_node	*prev;
-	int			i;
+	char		*env_copy;
 	char		*name;
 	char		*value;
-	char		*env_copy;
+	int			i;
 
 	*env_list = NULL;
 	i = 0;
 	while (env[i])
 	{
-		new_node = malloc(sizeof(t_env_node));
-		if (!new_node)
-		{
-			perror("malloc failed");
-			return ;
-		}
 		env_copy = strdup(env[i]);
 		if (!env_copy)
 		{
 			perror("strdup failed");
-			free(new_node);
 			return ;
 		}
-		// Separar nome e valor
 		name = strtok(env_copy, "=");
 		value = strtok(NULL, "=");
-		new_node->name = name ? strdup(name) : strdup("");
-		new_node->value = value ? strdup(value) : strdup("");
+		new_node = create_env_node(name, value);
 		free(env_copy);
-		if (!new_node->name || !new_node->value)
-		{
-			perror("strdup failed");
-			free(new_node->name);
-			free(new_node->value);
-			free(new_node);
+		if (!new_node)
 			return ;
-		}
-		new_node->next = NULL;
-
-		// Inserir o novo nó em ordem alfabética
-		if (*env_list == NULL || ft_strcmp(new_node->name, (*env_list)->name) < 0)
-		{
-			// Inserir no início da lista
-			new_node->next = *env_list;
-			*env_list = new_node;
-		}
-		else
-		{
-			// Percorrer a lista para encontrar a posição correta
-			current = *env_list;
-			while (current && ft_strcmp(new_node->name, current->name) > 0)
-			{
-				prev = current;
-				current = current->next;
-			}
-			// Inserir entre prev e current
-			prev->next = new_node;
-			new_node->next = current;
-		}
+		add_node_sorted(env_list, new_node);
 		i++;
 	}
 }
-
 
 t_bash	*init_bash(void)
 {

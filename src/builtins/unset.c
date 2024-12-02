@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 15:24:10 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/25 10:13:18 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:05:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_unset(t_env_node **env_list, char *name)
 	t_env_node	*current;
 	t_env_node	*prev;
 
-	if (!name || strlen(name) == 0)
+	if (!name || ft_strlen(name) == 0)
 	{
 		perror("unset: invalid variable name\n");
 		return ;
