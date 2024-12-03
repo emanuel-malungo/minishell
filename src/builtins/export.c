@@ -6,30 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:42:17 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 16:12:59 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 08:34:12 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-char	*ft_strndup(const char *s, size_t n)
-{
-	char	*str;
-	size_t	i;
-	size_t	len;
-
-	i = -1;
-	len = ft_strlen(s);
-	if (n > len)
-		n = len;
-	str = (char *)malloc(n + 1);
-	if (str == NULL)
-		return (NULL);
-	while (++i < n)
-		str[i] = s[i];
-	str[n] = '\0';
-	return (str);
-}
 
 void	handle_export(t_node *current, t_env_node **env_list)
 {

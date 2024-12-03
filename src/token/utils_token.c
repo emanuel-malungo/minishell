@@ -6,21 +6,10 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 10:35:27 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 16:19:28 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 08:37:49 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// int	check_is(char c, int j)
-// {
-// 	if (j == 0)
-// 		return (c == '|' || c == '>' || c == '<');
-// 	else if (j == 1)
-// 		return (c == '\"' || c == '\'');
-// 	else if (j == 2)
-// 		return (c == ' ');
-// 	else if (j == 3)
-// 		return (c != ' ' && c != '|' && c != '>' && c != '<' && c);
-// 	return (0);
-// }
+

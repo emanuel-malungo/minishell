@@ -6,18 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 07:23:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 08:25:13 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	is_digit(const char c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
 
 int	count_args(t_node *current)
 {
@@ -35,7 +28,7 @@ int	count_args(t_node *current)
 			count++;
 			while (temp->value[++i])
 			{
-				if (!is_digit(temp->value[i]) && !(i == 0
+				if (!ft_isdigit(temp->value[i]) && !(i == 0
 						&& temp->value[i] == '-'))
 				{
 					printf("exit: %s: numeric argument required\n",

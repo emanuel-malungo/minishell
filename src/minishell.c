@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 14:41:50 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:32:14 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	print_list(t_node *node)
 		node = node->next;
 	}
 }
-
 
 int	main(void)
 {

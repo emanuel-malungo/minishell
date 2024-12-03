@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 14:45:41 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 08:35:00 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,12 @@ void			ft_export(t_env_node **env_list, char *name, char *value);
 t_bash			*init_bash(void);
 void			free_list(t_node *node);
 void			print_list(t_node *node);
+char			*ft_strndup(const char *s, size_t n);
 char			*expand_input(char *input, t_env_node *env_list);
 void			fill_env_list(char **env, t_env_node **env_list);
 int				ft_strcmp(char *s1, char *s2);
 char			*get_env_value(const char *var, t_env_node *env_list);
+char			*ft_strtoke(char *str, const char *delim, char **saveptr);
 
 // ********************************************************** ./SRC/EXEC
 char			**convert_env_list_to_array(t_env_node *env_list);

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:53:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 16:09:09 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:31:51 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ static void	handle_command_or_argument(char **tokens, int *i, t_node **head,
 		}
 	}
 }
-
-
 
 t_node	*parse_tokens(char **tokens)
 {
