@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 08:06:23 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 08:22:54 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 08:43:18 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,20 @@ static int	is_delim(char c, const char *delim)
 	return (0);
 }
 
-char	*ft_strtoke(char *str, const char *delim, char **saveptr)
+char	*ft_strtok(char *str, const char *delim)
 {
-	char	*token_start;
+	static char	*saveptr;
+	char		*token_start;
 
-	if (!str && !*saveptr)
+	if (!str && !saveptr)
 		return (NULL);
 	if (!str)
-		str = *saveptr;
+		str = saveptr;
 	while (*str && is_delim(*str, delim))
 		str++;
 	if (*str == '\0')
 	{
-		*saveptr = NULL;
+		saveptr = NULL;
 		return (NULL);
 	}
 	token_start = str;
@@ -46,7 +47,7 @@ char	*ft_strtoke(char *str, const char *delim, char **saveptr)
 		*str = '\0';
 		str++;
 	}
-	*saveptr = str;
+	saveptr = str;
 	return (token_start);
 }
 
@@ -71,7 +72,7 @@ char	*ft_strndup(const char *s, size_t n)
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])

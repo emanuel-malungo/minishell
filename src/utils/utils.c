@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 12:30:23 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 08:39:11 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void	fill_env_list(char **env, t_env_node **env_list)
 			perror("strdup failed");
 			return ;
 		}
-		name = strtok(env_copy, "=");
-		value = strtok(NULL, "=");
+		name = ft_strtok(env_copy, "=");
+		value = ft_strtok(NULL, "=");
 		new_node = create_env_node(name, value);
 		free(env_copy);
 		if (!new_node)

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 16:15:08 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 09:08:37 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,29 @@ void	handle_command(t_node **current, t_env_node *env_list)
 		return ;
 	}
 	if (strcmp((*current)->value, "exit") == 0)
-		handle_exit(current);
-	else if (strcmp((*current)->value, "cd") == 0)
+		ft_exit(current);
+	else if (ft_strcmp((*current)->value, "cd") == 0)
 		handle_cd(current);
-	else if (strcmp((*current)->value, "pwd") == 0)
+	else if (ft_strcmp((*current)->value, "pwd") == 0)
 	{
 		if (!ft_pwd())
 			perror("pwd");
 	}
-	else if (strcmp((*current)->value, "export") == 0)
+	else if (ft_strcmp((*current)->value, "export") == 0)
 		handle_export((*current)->next, &env_list);
-	else if (strcmp((*current)->value, "unset") == 0)
+	else if (ft_strcmp((*current)->value, "unset") == 0)
 	{
 		if ((*current)->next && (*current)->next->value)
 			ft_unset(&env_list, (*current)->next->value);
 		else
 			fprintf(stderr, "unset: not enough arguments\n");
 	}
-	else if (strcmp((*current)->value, "echo") == 0)
+	else if (ft_strcmp((*current)->value, "echo") == 0)
 	{
 		if (!ft_echo(*current))
 			perror("echo");
 	}
-	else if (strcmp((*current)->value, "env") == 0)
+	else if (ft_strcmp((*current)->value, "env") == 0)
 		ft_env(env_list);
 	else
 		execute_external_command(*current, env_list);

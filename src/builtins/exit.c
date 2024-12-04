@@ -6,62 +6,82 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 08:25:13 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:41:29 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_args(t_node *current)
+int	is_within_int_limits(const char *str)
+{
+	long long	result;
+	int			sign;
+
+	result = 0;
+	sign = 1;
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	if (*str == '-')
+		sign = -1;
+	if (*str == '+' || *str == '-')
+		str++;
+	while (*str >= '0' && *str <= '9')
+	{
+		result = result * 10 + (*str - '0');
+		if (sign >= 1 && result > INT_MAX)
+			return (0);
+		if (sign == -1 && (-result) < INT_MIN)
+			return (0);
+		str++;
+	}
+	if (*str != '\0')
+		return (0);
+	return (1);
+}
+
+void	check_exit_args(t_node *current, int *arg_count, int *exit_code)
 {
 	t_node	*temp;
-	int		count;
-	int		i;
 
-	i = -1;
-	count = 0;
-	temp = current;
+	temp = current->next;
+	*arg_count = 0;
 	while (temp)
 	{
-		if (strcmp(temp->type, "argument") == 0)
+		if (ft_strcmp(temp->type, "argument") == 0)
 		{
-			count++;
-			while (temp->value[++i])
+			(*arg_count)++;
+			if (!is_within_int_limits(temp->value))
 			{
-				if (!ft_isdigit(temp->value[i]) && !(i == 0
-						&& temp->value[i] == '-'))
-				{
-					printf("exit: %s: numeric argument required\n",
-						temp->value);
-					return (-1);
-				}
+				printf("exit\n");
+				printf("minishell: exit: %s: numeric argument required\n",
+					temp->value);
+				exit(EXIT_FAILURE);
 			}
+			*exit_code = ft_atoi(temp->value);
 		}
 		temp = temp->next;
 	}
-	return (count);
 }
 
-void	handle_exit(t_node **current)
+void	ft_exit(t_node **current)
 {
 	int	arg_count;
 	int	exit_code;
 
+	arg_count = 0;
+	exit_code = 0;
 	if (!current || !(*current))
-		exit(0);
-	arg_count = count_args(*current);
-	if (arg_count == -1)
-		exit(2);
-	else if (arg_count > 1)
 	{
-		printf("exit: too many arguments\n");
+		printf("exit\n");
+		exit(0);
+	}
+	check_exit_args(*current, &arg_count, &exit_code);
+	if (arg_count > 1)
+	{
+		printf("exit\n");
+		printf("minishell: exit: too many arguments\n");
 		return ;
 	}
-	if (arg_count == 1 && (*current)->type && strcmp((*current)->type,
-			"argument") == 0)
-	{
-		exit_code = atoi((*current)->value);
-		exit(exit_code);
-	}
-	exit(0);
+	printf("exit\n");
+	exit(exit_code);
 }

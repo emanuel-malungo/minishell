@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 16:32:14 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:35:04 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(void)
 		expanded_input = expand_input(bash->input, bash->env_list);
 		bash->tokens = tokenizer(expanded_input);
 		bash->syntax_list = parse_tokens(bash->tokens);
-		print_list(bash->syntax_list);
+		// print_list(bash->syntax_list);
 		exec_all_commands(bash->syntax_list, bash->env_list);
 		free(bash->input);
 	}

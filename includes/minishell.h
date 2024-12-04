@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 08:35:00 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/03 09:07:14 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int				ft_wordsize(char const *str, int i);
 int				ft_pwd(void);
 void			handle_cd(t_node **current);
 void			ft_env(t_env_node *env_list);
-void			handle_exit(t_node **current);
+void			ft_exit(t_node **current);
 int				ft_cd(const char *path);
 int				ft_echo(t_node *syntax_list);
 void			ft_unset(t_env_node **env_list, char *name);
@@ -82,7 +82,7 @@ char			*expand_input(char *input, t_env_node *env_list);
 void			fill_env_list(char **env, t_env_node **env_list);
 int				ft_strcmp(char *s1, char *s2);
 char			*get_env_value(const char *var, t_env_node *env_list);
-char			*ft_strtoke(char *str, const char *delim, char **saveptr);
+char			*ft_strtok(char *str, const char *delim);
 
 // ********************************************************** ./SRC/EXEC
 char			**convert_env_list_to_array(t_env_node *env_list);
