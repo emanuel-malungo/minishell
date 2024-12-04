@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   exec_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/04 13:43:12 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:25:53 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,20 @@ void	handle_command(t_node **current, t_env_node *env_list)
 	else if (ft_strcmp((*current)->value, "cd") == 0)
 		ft_cd(current, env_list);
 	else if (ft_strcmp((*current)->value, "pwd") == 0)
-	{
-		if (!ft_pwd())
-			perror("pwd");
-	}
+		ft_pwd();
 	else if (ft_strcmp((*current)->value, "export") == 0)
 		handle_export((*current)->next, &env_list);
+	else if (ft_strcmp((*current)->value, "env") == 0)
+		ft_env(env_list);
+	else if (ft_strcmp((*current)->value, "echo") == 0)
+		ft_echo(*current);
 	else if (ft_strcmp((*current)->value, "unset") == 0)
 	{
 		if ((*current)->next && (*current)->next->value)
 			ft_unset(&env_list, (*current)->next->value);
 		else
-			fprintf(stderr, "unset: not enough arguments\n");
+			printf("unset: not enough arguments\n");
 	}
-	else if (ft_strcmp((*current)->value, "echo") == 0)
-	{
-		if (!ft_echo(*current))
-			perror("echo");
-	}
-	else if (ft_strcmp((*current)->value, "env") == 0)
-		ft_env(env_list);
 	else
 		execute_external_command(*current, env_list);
 }
