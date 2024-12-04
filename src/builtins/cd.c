@@ -6,58 +6,72 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:16:30 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 08:32:03 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:53:09 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_cd(t_node **current)
+int	is_valid_cd_arguments(t_node *current)
 {
-	if (!current || !*current)
+	int		arg_count;
+	t_node	*temp;
+
+	arg_count = 0;
+	temp = current->next;
+	while (temp)
 	{
-		perror("Invalid node in handle_cd\n");
-		return ;
+		if (strcmp(temp->type, "argument") == 0)
+			arg_count++;
+		temp = temp->next;
 	}
-	*current = (*current)->next;
-	if (*current && (*current)->type && strcmp((*current)->type,
-			"argument") == 0)
+	if (arg_count > 1)
 	{
-		if (!ft_cd((*current)->value))
-			perror("cd");
+		printf("minishell: cd: too many arguments\n");
+		return (0);
 	}
-	else if (!ft_cd(NULL))
-	{
-		perror("cd");
-		return ;
-	}
+	return (1);
 }
 
-int	ft_cd(const char *path)
+void	do_cd(char *path)
 {
 	char	*cwd;
 
-	if (path == NULL)
-	{
-		path = getenv("HOME");
-		if (!path)
-		{
-			perror("cd");
-			return (0);
-		}
-	}
 	if (chdir(path) != 0)
 	{
 		perror("cd");
-		return (0);
+		return ;
 	}
 	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("getcwd");
+		exit(EXIT_FAILURE);
+	}
 	if (setenv("PWD", cwd, 1) != 0)
 	{
 		free(cwd);
 		perror("Error setting PWD");
-		return (0);
+		exit(EXIT_FAILURE);
 	}
 	free(cwd);
-	return (1);
+}
+
+void	ft_cd(t_node **current, t_env_node *env_list)
+{
+	char	*path;
+
+	path = NULL;
+	if (!is_valid_cd_arguments(*current))
+		return ;
+	if ((*current)->next && ft_strcmp((*current)->next->type, "argument") == 0)
+		path = (*current)->next->value;
+	else
+		path = get_env_value("HOME", env_list);
+	if (!path)
+	{
+		printf("cd: HOME not set\n");
+		exit(EXIT_FAILURE);
+	}
+	do_cd(path);
 }

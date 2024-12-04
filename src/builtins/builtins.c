@@ -6,11 +6,12 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 09:08:37 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:43:12 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
 
 void	handle_command(t_node **current, t_env_node *env_list)
 {
@@ -22,7 +23,7 @@ void	handle_command(t_node **current, t_env_node *env_list)
 	if (strcmp((*current)->value, "exit") == 0)
 		ft_exit(current);
 	else if (ft_strcmp((*current)->value, "cd") == 0)
-		handle_cd(current);
+		ft_cd(current, env_list);
 	else if (ft_strcmp((*current)->value, "pwd") == 0)
 	{
 		if (!ft_pwd())
@@ -50,23 +51,23 @@ void	handle_command(t_node **current, t_env_node *env_list)
 
 void	exec_all_commands(t_node *syntax_list, t_env_node *env_list)
 {
-	t_node	*current;
+	t_node	*temp;
 
 	if (!syntax_list)
 	{
 		perror("Error: syntax_list is NULL\n");
 		return ;
 	}
-	current = syntax_list;
-	while (current)
+	temp = syntax_list;
+	while (temp)
 	{
-		if (!current->type || !current->value)
+		if (!temp->type || !temp->value)
 		{
 			perror("Error: invalid node in syntax_list\n");
 			return ;
 		}
-		if (ft_strcmp(current->type, "command") == 0)
-			handle_command(&current, env_list);
-		current = current->next;
+		if (ft_strcmp(temp->type, "command") == 0)
+			handle_command(&temp, env_list);
+		temp = temp->next;
 	}
 }

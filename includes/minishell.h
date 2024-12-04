@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 09:07:14 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:52:23 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int				ft_pwd(void);
 void			handle_cd(t_node **current);
 void			ft_env(t_env_node *env_list);
 void			ft_exit(t_node **current);
-int				ft_cd(const char *path);
+void			ft_cd(t_node **current, t_env_node *env_list);
 int				ft_echo(t_node *syntax_list);
 void			ft_unset(t_env_node **env_list, char *name);
 void			exec_all_commands(t_node *syntax_list, t_env_node *env_list);
