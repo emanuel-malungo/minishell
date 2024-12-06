@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/04 14:29:22 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:54:20 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_bash
 	char		**tokens;
 	char		**environ;
 	t_env_node	*env_list;
+	int			exit_status;
 	t_node		*syntax_list;
 }				t_bash;
 
@@ -78,10 +79,10 @@ int				ft_strcmp(char *s1, char *s2);
 char			*ft_strndup(const char *s, size_t n);
 t_env_node		*new_env_node(char *name, char *value);
 char			*ft_strtok(char *str, const char *delim);
-char			*expand_input(char *input, t_env_node *env_list);
+char			*expand_input(t_bash *bah);
 void			fill_env_list(char **env, t_env_node **env_list);
 void			add_env_node(t_env_node **env_list, t_env_node *new_node);
-char			*get_env_value(const char *var, t_env_node *env_list);
+char			*get_env_value(char *var, t_env_node *env_list);
 
 // ********************************************************** ./SRC/EXEC
 char			*resolve_command_path(const char *command,

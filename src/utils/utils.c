@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 08:39:11 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/06 06:50:06 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	add_node_sorted(t_env_node **head, t_env_node *new_node)
 	t_env_node	*current;
 	t_env_node	*prev;
 
-	if (!*head || strcmp(new_node->name, (*head)->name) < 0)
+	if (!*head || ft_strcmp(new_node->name, (*head)->name) < 0)
 	{
 		new_node->next = *head;
 		*head = new_node;
@@ -25,7 +25,7 @@ void	add_node_sorted(t_env_node **head, t_env_node *new_node)
 	}
 	current = *head;
 	prev = NULL;
-	while (current && strcmp(new_node->name, current->name) > 0)
+	while (current && ft_strcmp(new_node->name, current->name) > 0)
 	{
 		prev = current;
 		current = current->next;
@@ -40,13 +40,13 @@ t_env_node	*create_env_node(char *name, char *value)
 
 	new_node = malloc(sizeof(t_env_node));
 	if (name)
-		new_node->name = strdup(name);
+		new_node->name = ft_strdup(name);
 	else
-		new_node->name = strdup("");
+		new_node->name = ft_strdup("");
 	if (value)
-		new_node->value = strdup(value);
+		new_node->value = ft_strdup(value);
 	else
-		new_node->value = strdup("");
+		new_node->value = ft_strdup("");
 	new_node->next = NULL;
 	if (!new_node->name || !new_node->value)
 	{
@@ -71,7 +71,7 @@ void	fill_env_list(char **env, t_env_node **env_list)
 	i = 0;
 	while (env[i])
 	{
-		env_copy = strdup(env[i]);
+		env_copy = ft_strdup(env[i]);
 		if (!env_copy)
 		{
 			perror("strdup failed");

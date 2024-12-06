@@ -20,7 +20,6 @@ SRCS = $(SRC_DIR)/minishell.c \
        $(SRC_DIR)/builtins/exit.c \
        $(SRC_DIR)/builtins/export.c \
        $(SRC_DIR)/parse/parse.c \
-       $(SRC_DIR)/token/utils_token.c \
        $(SRC_DIR)/token/handle.c \
        $(SRC_DIR)/token/token.c \
        $(SRC_DIR)/exec/exec_all.c \

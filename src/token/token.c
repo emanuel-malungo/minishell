@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 08:24:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 16:24:08 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/06 09:16:02 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	process_token(const char *input, int *i, int *count)
 	}
 }
 
-static int	count_word(const char *input)
+static int	count_word(char const *input)
 {
 	int	i;
 	int	count;
@@ -53,9 +53,9 @@ static int	count_word(const char *input)
 			i++;
 		if (!input[i])
 			break ;
-		if (check_is(input[i], 0))
+		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
-			while (input[i] && check_is(input[i], 0))
+			while (input[i] && (input[i] == '|' || input[i] == '>' || input[i] == '<'))
 				i++;
 			count++;
 		}

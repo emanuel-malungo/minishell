@@ -6,20 +6,20 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:00:25 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 12:17:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:55:14 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_env_value(const char *var, t_env_node *env_list)
+char	*get_env_value(char *var, t_env_node *env_list)
 {
 	t_env_node	*current;
 
 	current = env_list;
 	while (current)
 	{
-		if (strcmp(current->name, var) == 0)
+		if (ft_strcmp(current->name, var) == 0)
 			return (current->value);
 		current = current->next;
 	}
@@ -60,21 +60,34 @@ static char	*append_literal(char *input, int *i, char *result)
 	return (temp);
 }
 
-char	*expand_input(char *input, t_env_node *env_list)
+char	*expand_input(t_bash *bash)
 {
 	char	*result;
+	char	*expanded_var;
 	int		i;
 
-	result = ft_strdup("");
 	i = 0;
-	while (input[i])
+	result = ft_strdup("");
+	while (bash->input[i])
 	{
-		if (input[i] == '\'')
-			return (input);
-		if (input[i] == '$' && input[i + 1] && input[i + 1] != ' ')
-			result = expand_variable(input, &i, result, env_list);
+		if (bash->input[i] == '\'')
+			return (bash->input);
+		if (bash->input[i] == '$')
+		{
+			if (bash->input[i + 1] == '?')
+			{
+				expanded_var = ft_itoa(bash->exit_status);
+				result = ft_strjoin(result, expanded_var);
+				free(expanded_var);
+				i += 2;
+			}
+			else if (bash->input[i + 1] && bash->input[i + 1] != ' ')
+				result = expand_variable(bash->input, &i, result, bash->env_list);
+			else
+				result = append_literal(bash->input, &i, result);
+		}
 		else
-			result = append_literal(input, &i, result);
+			result = append_literal(bash->input, &i, result);
 	}
 	return (result);
 }
