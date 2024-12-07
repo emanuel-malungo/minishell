@@ -6,19 +6,20 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 10:45:33 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/03 08:17:54 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/07 10:43:26 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_echo(t_node *syntax_list)
+int	ft_echo(t_node *syntax_list, t_bash *bash)
 {
 	int		line;
 	t_node	*current;
 
-	current = syntax_list->next;
 	line = 1;
+	bash->exit_status = 0;
+	current = syntax_list->next;
 	if (current && ft_strcmp(current->value, "-n") == 0)
 	{
 		line = 0;

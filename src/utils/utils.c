@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/06 06:50:06 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:48:35 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ t_bash	*init_bash(void)
 		return (NULL);
 	}
 	ft_memset(bash, 0, sizeof(t_bash));
+	bash->exit_status = 0;
 	if (!environ || !*environ)
 	{
 		perror("Environment is empty or NULL");

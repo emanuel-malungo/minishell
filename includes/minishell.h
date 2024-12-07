@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/06 13:54:20 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/07 10:54:35 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,13 @@ typedef struct s_bash
 }				t_bash;
 
 // ********************************************************** ./SRC/TOKEN
-int				is_word_char(char c);
 int				check_is(char c, int j);
 char			**tokenizer(char const *s);
-int				wordsize(char const *str, int i);
 void			handle_word_token(t_tokenizer *token);
 void			handle_quote_token(t_tokenizer *token);
 void			handle_operator_token(t_tokenizer *token);
 
 // ********************************************************** ./SRC/PARSE
-int				ft_isspace(const char s);
 void			ft_free(char **strs, int j);
 t_node			*parse_tokens(char **tokens);
 int				ft_count_word(char const *s);
@@ -59,17 +56,17 @@ char			*expand_env_var(const char *input);
 int				ft_wordsize(char const *str, int i);
 
 // ********************************************************** ./SRC/BUILTINS
-int				ft_pwd(void);
-void			ft_exit(t_node **current);
+void			ft_pwd(t_node *current, t_bash *bash);
+void			ft_exit(t_node **current, t_bash *bash);
 void			handle_cd(t_node **current);
-int				ft_echo(t_node *syntax_list);
+int				ft_echo(t_node *syntax_list, t_bash *bash);
 void			ft_env(t_env_node *env_list);
 void			ft_unset(t_env_node **env_list, char *name);
 void			ft_cd(t_node **current, t_env_node *env_list);
 void			handle_export(t_node *current, t_env_node **env_list);
-void			handle_command(t_node **current, t_env_node *env_list);
+void			handle_command(t_node **current, t_bash *bash);
 void			ft_export(t_env_node **env_list, char *name, char *value);
-void			exec_all_commands(t_node *syntax_list, t_env_node *env_list);
+void			exec_all_commands(t_bash *bash);
 
 // ********************************************************** ./SRC/UTILS
 t_bash			*init_bash(void);
@@ -87,8 +84,7 @@ char			*get_env_value(char *var, t_env_node *env_list);
 // ********************************************************** ./SRC/EXEC
 char			*resolve_command_path(const char *command,
 					t_env_node *env_list);
-void			execute_external_command(t_node *command_node,
-					t_env_node *env_list);
+void			execute_external_command(t_node *command_node, t_bash *bash);
 void			add_node(t_node **head, char *type, char *value);
 char			**convert_env_list_to_array(t_env_node *env_list);
 

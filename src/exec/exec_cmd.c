@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:39 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 12:50:58 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/07 10:58:30 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,24 +77,26 @@ static void	execute_command(t_command_exec *exec_data, char *resolved_path)
 		waitpid(exec_data->pid, NULL, 0);
 }
 
-void	execute_external_command(t_node *command_node, t_env_node *env_list)
+void	execute_external_command(t_node *command_node, t_bash *bash)
 {
 	t_command_exec	exec_data;
 	char			*resolved_path;
-
+	
+	bash->exit_status = 0;
 	exec_data.command = command_node->value;
 	exec_data.argv = prepare_argv(command_node);
 	if (!exec_data.argv)
 		return ;
-	exec_data.envp = convert_env_list_to_array(env_list);
+	exec_data.envp = convert_env_list_to_array(bash->env_list);
 	if (!exec_data.envp)
 	{
 		free(exec_data.argv);
 		return ;
 	}
-	resolved_path = resolve_path(exec_data.command, env_list);
+	resolved_path = resolve_path(exec_data.command, bash->env_list);
 	if (!resolved_path)
 	{
+		bash->exit_status = 127;
 		printf("%s: Command not found\n", exec_data.command);
 		free(exec_data.argv);
 		free(exec_data.envp);

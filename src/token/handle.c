@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:09:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/06 08:58:03 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:09:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	handle_word_token(t_tokenizer *token)
 	int	size;
 
 	start = token->i;
-	while (token->input[token->i] && token->input[token->i] != ' '
-		&& token->input[token->i] != '"' && token->input[token->i] != '\'')
+	while (check_is(token->input[token->i], 3))
 		token->i++;
 	size = token->i - start;
 	token->tokens[token->j] = malloc(size + 1);
