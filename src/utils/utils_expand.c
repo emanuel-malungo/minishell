@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:00:25 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/08 14:03:14 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/08 14:31:05 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,52 +26,64 @@ char	*get_env_value(char *var, t_env_node *env_list)
 	return ("");
 }
 
-char	*handle_variable(const char *input, size_t *i, size_t *j, t_bash *bash)
-{
-	t_env_node	*env;
-	const char	*value;
-
-	env = bash->env_list;
-	env->start = *i;
-	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-		(*i)++;
-	strncpy(env->var, &input[env->start], *i - env->start);
-	env->var[*i - env->start] = '\0';
-	value = getenv(env->var);
-	if (!value)
-		value = get_env_value(env->var, env);
-	if (value)
-		*j += snprintf(&env->temp[*j], sizeof(env->temp) - *j, "%s", value);
-	return (env->temp);
-}
-
 char	*expand_variable(const char *input, t_bash *bash)
 {
-	t_env_node	*env;
-	char		*expanded;
-	size_t		i;
-	size_t		j;
+	char	*expanded;
+	size_t	i = 0, j = 0;
+	size_t	len = strlen(input);
+	char	temp[4096];
 
-	env = bash->env_list;
-	expanded = malloc(ft_strlen(input) * 2 + 1);
+	expanded = (char *)malloc(len * 2 + 1); // Expansão segura
 	if (!expanded)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (input[i])
+	while (i < len)
 	{
-		if (input[i] == '\'' && !env->quote_flag)
-			env->quote_flag = 1 - env->quote_flag;
-		else if (input[i] == '"' && !env->quote_flag)
-			env->quote_flag = 2 - env->quote_flag;
-		else if (input[i] == '$' && env->quote_flag != 1)
+		if (input[i] == '\'') // Aspas simples, ignora expansão
+		{
+			expanded[j++] = input[i++];
+			while (i < len && input[i] != '\'')
+				expanded[j++] = input[i++];
+			if (i < len)
+				expanded[j++] = input[i++];
+		}
+		else if (input[i] == '$') // Detecta variáveis
 		{
 			i++;
-			expanded = handle_variable(input, &i, &j, bash);
-			continue;
+			if (input[i] == '?') // Expansão de $?
+			{
+				j += snprintf(temp, sizeof(temp), "%d", bash->exit_status);
+				strncpy(&expanded[j - strlen(temp)], temp, strlen(temp));
+				i++;
+			}
+			else
+			{
+				size_t start = i;
+				while (i < len && (isalnum(input[i]) || input[i] == '_'))
+					i++;
+				char var[128];
+				strncpy(var, &input[start], i - start);
+				var[i - start] = '\0';
+				const char *value = getenv(var);
+				if (!value) // Busca no ambiente do minishell
+					value = get_env_value(var, bash->env_list);
+				if (value)
+				{
+					j += snprintf(temp, sizeof(temp), "%s", value);
+					strncpy(&expanded[j - strlen(temp)], temp, strlen(temp));
+				}
+			}
 		}
-		expanded[j++] = input[i++];
+		else
+			expanded[j++] = input[i++];
 	}
 	expanded[j] = '\0';
+	return (expanded);
+}
+
+char	*expanded_input(char *input, t_bash *bash)
+{
+	char	*expanded = expand_variable(input, bash);
+	if (!expanded)
+		return (NULL);
 	return (expanded);
 }
