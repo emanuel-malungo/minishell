@@ -10,6 +10,7 @@ CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
 SRCS = $(SRC_DIR)/minishell.c \
        $(SRC_DIR)/utils/utils.c \
        $(SRC_DIR)/utils/utils_expand.c \
+       $(SRC_DIR)/utils/utils_export.c \
        $(SRC_DIR)/utils/utils_parse.c \
        $(SRC_DIR)/utils/utils_lib.c \
        $(SRC_DIR)/builtins/cd.c \

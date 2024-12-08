@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:15 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/02 12:56:45 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/07 12:14:47 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*find_path_env(t_env_node *env_list)
 	tmp = env_list;
 	while (tmp)
 	{
-		if (strcmp(tmp->name, "PATH") == 0)
+		if (ft_strcmp(tmp->name, "PATH") == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}
@@ -30,7 +30,7 @@ static char	*try_resolve_command(const char *command, const char *directory)
 {
 	char	*command_path;
 
-	command_path = malloc(strlen(directory) + strlen(command) + 2);
+	command_path = malloc(ft_strlen(directory) + ft_strlen(command) + 2);
 	if (!command_path)
 		return (NULL);
 	sprintf(command_path, "%s/%s", directory, command);

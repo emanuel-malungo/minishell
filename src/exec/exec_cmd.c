@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:36:39 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 10:58:30 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/08 13:12:52 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,17 @@ static char	*resolve_path(char *command, t_env_node *env_list)
 	return (resolve_command_path(command, env_list));
 }
 
-static void	execute_command(t_command_exec *exec_data, char *resolved_path)
+static void	execute_command(t_command_exec *exec_data, char *resolved_path,
+		t_bash *bash)
 {
+	int status;
+
 	exec_data->pid = fork();
 	if (exec_data->pid == -1)
-		return ;
+	{
+		perror("Fork failed");
+		exit(1);
+	}
 	if (exec_data->pid == 0)
 	{
 		if (execve(resolved_path, exec_data->argv, exec_data->envp) == -1)
@@ -74,23 +80,35 @@ static void	execute_command(t_command_exec *exec_data, char *resolved_path)
 		}
 	}
 	else
-		waitpid(exec_data->pid, NULL, 0);
+	{
+		waitpid(exec_data->pid, &status, 0);
+		if (WIFEXITED(status))
+			bash->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			bash->exit_status = 128 + WTERMSIG(status);
+		else
+			bash->exit_status = 1;
+	}
 }
 
 void	execute_external_command(t_node *command_node, t_bash *bash)
 {
 	t_command_exec	exec_data;
 	char			*resolved_path;
-	
+
 	bash->exit_status = 0;
 	exec_data.command = command_node->value;
 	exec_data.argv = prepare_argv(command_node);
 	if (!exec_data.argv)
+	{
+		bash->exit_status = 1;
 		return ;
+	}
 	exec_data.envp = convert_env_list_to_array(bash->env_list);
 	if (!exec_data.envp)
 	{
 		free(exec_data.argv);
+		bash->exit_status = 1;
 		return ;
 	}
 	resolved_path = resolve_path(exec_data.command, bash->env_list);
@@ -102,7 +120,7 @@ void	execute_external_command(t_node *command_node, t_bash *bash)
 		free(exec_data.envp);
 		return ;
 	}
-	execute_command(&exec_data, resolved_path);
+	execute_command(&exec_data, resolved_path, bash);
 	free(exec_data.argv);
 	free(exec_data.envp);
 	if (resolved_path != exec_data.command)

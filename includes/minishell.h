@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:36 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 10:54:35 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/08 13:52:57 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ char			*expand_env_var(const char *input);
 int				ft_wordsize(char const *str, int i);
 
 // ********************************************************** ./SRC/BUILTINS
-void			ft_pwd(t_node *current, t_bash *bash);
+void			ft_pwd(t_bash *bash);
 void			ft_exit(t_node **current, t_bash *bash);
-void			handle_cd(t_node **current);
+void			ft_cd(t_node **current, t_env_node *env_list);
 int				ft_echo(t_node *syntax_list, t_bash *bash);
 void			ft_env(t_env_node *env_list);
 void			ft_unset(t_env_node **env_list, char *name);
-void			ft_cd(t_node **current, t_env_node *env_list);
-void			handle_export(t_node *current, t_env_node **env_list);
+void			handle_export(t_node *current, t_env_node **env_list,
+					t_bash *bash);
 void			handle_command(t_node **current, t_bash *bash);
 void			ft_export(t_env_node **env_list, char *name, char *value);
 void			exec_all_commands(t_bash *bash);
@@ -76,10 +76,13 @@ int				ft_strcmp(char *s1, char *s2);
 char			*ft_strndup(const char *s, size_t n);
 t_env_node		*new_env_node(char *name, char *value);
 char			*ft_strtok(char *str, const char *delim);
-char			*expand_input(t_bash *bah);
+// char			*expand_input(t_bash *bah);
+char	*expand_variable(const char *input, t_bash *bash);
 void			fill_env_list(char **env, t_env_node **env_list);
 void			add_env_node(t_env_node **env_list, t_env_node *new_node);
 char			*get_env_value(char *var, t_env_node *env_list);
+void			handle_export(t_node *current, t_env_node **env_list,
+					t_bash *bash);
 
 // ********************************************************** ./SRC/EXEC
 char			*resolve_command_path(const char *command,

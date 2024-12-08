@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 10:52:49 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/07 11:20:18 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	handle_command(t_node **current, t_bash *bash)
 	else if (ft_strcmp((*current)->value, "cd") == 0)
 		ft_cd(current, bash->env_list);
 	else if (ft_strcmp((*current)->value, "pwd") == 0)
-		ft_pwd(*current, bash);
+		ft_pwd(bash);
 	else if (ft_strcmp((*current)->value, "export") == 0)
-		handle_export((*current)->next, &bash->env_list);
+		handle_export((*current)->next, &bash->env_list, bash);
 	else if (ft_strcmp((*current)->value, "env") == 0)
 		ft_env(bash->env_list);
 	else if (ft_strcmp((*current)->value, "echo") == 0)

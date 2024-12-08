@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:38:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 10:54:58 by emalungo         ###   ########.fr       */
+/*   Updated: 2024/12/08 13:53:25 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	print_list(t_node *node)
 int	main(void)
 {
 	t_bash	*bash;
-	char	*expanded_input;
+	char	*processed_input;
 
 	bash = init_bash();
 	while (1)
@@ -33,10 +33,9 @@ int	main(void)
 		if (!bash->input)
 			break ;
 		add_history(bash->input);
-		expanded_input = expand_input(bash);
-		bash->tokens = tokenizer(expanded_input);
+		processed_input = expand_variable(bash->input, bash);
+		bash->tokens = tokenizer(processed_input);
 		bash->syntax_list = parse_tokens(bash->tokens);
-		// print_list(bash->syntax_list);
 		exec_all_commands(bash);
 		free(bash->input);
 	}
