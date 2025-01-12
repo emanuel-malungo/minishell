@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 18:22:12 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 13:09:48 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:30:18 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,29 @@ void	exc_all_cmds(t_shell *shell)
 			handle_command(&temp, shell);
 		temp = temp->next;
 	}
+}
+
+int	exec(t_shell *shell)
+{
+	has_redirection(shell);
+	if (shell->redir_needed)
+	{
+		shell->stdin = dup(STDIN_FILENO);
+		shell->stdout = dup(STDOUT_FILENO);
+		if (shell->stdin == -1 || shell->stdout == -1)
+		{
+			perror("dup failed");
+			return (0);
+		}
+		handle_redir(shell->list_syntax);
+	}
+	exc_all_cmds(shell);
+	if (shell->redir_needed)
+	{
+		dup2(shell->stdin, STDIN_FILENO);
+		dup2(shell->stdout, STDOUT_FILENO);
+		close(shell->stdin);
+		close(shell->stdout);
+	}
+	return (1);
 }

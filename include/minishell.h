@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 10:54:50 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 13:10:01 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:28:26 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ void				handle_quoto_token(t_token *token, char *input);
 void				handle_operator_token(t_token *token, char *input);
 
 // ***************** EXEC *****************
-
 t_exec				*init_exec(void);
+int					exec(t_shell *shell);
 void				exc_all_cmds(t_shell *shell);
 char				*find_path_env(t_env *env_list);
 char				**prepare_argv(t_node *list_syntax);
@@ -119,6 +119,7 @@ void				ft_export(t_env **env_list, char *key, char *value);
 
 // ***************** REDIRECTIONS *****************
 
+void				has_redirection(t_shell *shell);
 int					heredoc_redir(t_node *current);
 int					handle_redir(t_node *list_syntax);
 

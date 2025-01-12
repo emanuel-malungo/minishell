@@ -1,0 +1,6 @@
+include
+libft
+Makefile
+minishell
+output.txt
+src

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 18:33:42 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 13:02:47 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:39:18 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	exec_ext_cmd(t_node *list_syntax, t_shell *shell)
 	resolved_path = resolve_path(exec->command, shell->env_list);
 	if (!resolved_path)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", exec->command);
+		printf("minishell: %s: Permission denied\n", exec->command);
 		g_exit_status = 127;
 		return ;
 	}

@@ -6,11 +6,31 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 22:06:15 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 12:19:32 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:30:38 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	has_redirection(t_shell *shell)
+{
+	t_node	*current;
+
+	current = shell->list_syntax;
+	shell->redir_needed = 0;
+	while (current != NULL)
+	{
+		if (ft_strcmp(current->type, "<") == 0 || ft_strcmp(current->type,
+				"<<") == 0 || ft_strcmp(current->type, ">>") == 0
+			|| ft_strcmp(current->type, ">") == 0 || ft_strcmp(current->type,
+				"pipe") == 0)
+		{
+			shell->redir_needed = 1;
+			break ;
+		}
+		current = current->next;
+	}
+}
 
 static int	append_redir(t_node *current)
 {
