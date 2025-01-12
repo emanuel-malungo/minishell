@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 20:43:46 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:45:54 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	is_within_int_limits(const char *str)
 	return (1);
 }
 
-void	check_exit_args(t_node *current, int *arg_count, int *exit_code, t_shell *shell)
+void	check_exit_args(t_node *current, int *arg_count, int *exit_code,
+		t_shell *shell)
 {
 	t_node	*temp;
 

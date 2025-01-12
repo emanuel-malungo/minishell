@@ -6,13 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 22:06:15 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 10:18:44 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:47:31 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
 
 int	handle_redir(t_node *list_syntax)
 {

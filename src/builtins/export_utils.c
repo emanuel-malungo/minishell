@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 19:56:04 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 20:59:42 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:44:47 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	is_valid_identifier(char *key)
 	return (1);
 }
 
-void	process_export_variable(t_env **env_list, char *key, char *value, t_shell *shell)
+void	process_export_variable(t_env **env_list, char *key, char *value,
+		t_shell *shell)
 {
 	if (!is_valid_identifier(key))
 	{
@@ -38,10 +39,10 @@ void	process_export_variable(t_env **env_list, char *key, char *value, t_shell *
 		free(value);
 		return ;
 	}
-        if (value)
-	        ft_export(env_list, key, value);
-        else
-                ft_export(env_list, key, ""); 
+	if (value)
+		ft_export(env_list, key, value);
+	else
+		ft_export(env_list, key, "");
 	free(key);
 	free(value);
 }
@@ -90,8 +91,8 @@ void	print_all_exports(t_env *env_list)
 
 void	handle_export(t_node *current, t_env **env_list, t_shell *shell)
 {
-	char *name;
-	char *value;
+	char	*name;
+	char	*value;
 
 	shell->exit_status = 0;
 	if (!current || !current->value)

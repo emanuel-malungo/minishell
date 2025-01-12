@@ -6,17 +6,42 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 15:22:35 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 17:16:18 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 12:03:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+void	get_size_redir(char *input, int *i)
+{
+	if (input[*i] == '|' || input[*i] == '>' || input[*i] == '<')
+	{
+		if (input[*i + 1] == input[*i])
+			*i += 2;
+		else
+			(*i)++;
+	}
+}
+
+void	get_size_quote(char *input, int *i)
+{
+	char	quote;
+
+	quote = input[*i];
+	if (quote == '"' || quote == '\'')
+	{
+		(*i)++;
+		while (input[*i] && input[*i] != quote)
+			(*i)++;
+		if (input[*i] == quote)
+			(*i)++;
+	}
+}
+
 int	get_size_token(char *input)
 {
-	int		i;
-	int		len;
-	char	quote;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = 0;
@@ -24,21 +49,10 @@ int	get_size_token(char *input)
 	{
 		while (input[i] == ' ')
 			i++;
-		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
+		get_size_redir(input, &i);
+		if (input[i] == '"' || input[i] == '\'')
 		{
-			if (input[i + 1] == input[i])
-				i += 2;
-			else
-				i++;
-			len++;
-		}
-		else if (input[i] == '"' || input[i] == '\'')
-		{
-			quote = input[i++];
-			while (input[i] && input[i] != quote)
-				i++;
-			if (input[i] == quote)
-				i++;
+			get_size_quote(input, &i);
 			len++;
 		}
 		else

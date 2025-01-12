@@ -6,9 +6,8 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 22:34:11 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 10:17:58 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:46:52 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-

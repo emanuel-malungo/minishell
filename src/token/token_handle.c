@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 14:55:47 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 15:30:04 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:50:22 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	handle_operator_token(t_token *token, char *input)
 	{
 		operator_len = 2;
 	}
-	operator= malloc(sizeof(char) * (operator_len + 1));
+	operator = malloc(sizeof(char) * (operator_len + 1));
 	if (!operator)
 		return ;
 	strncpy(operator, & input[i], operator_len);
