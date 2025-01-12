@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 11:16:25 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:31:13 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 12:56:01 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_shell	*init_shell(char **environ)
 	if (!shell)
 		return (NULL);
 	shell->input = NULL;
-	shell->exit_status = 0;
+	g_exit_status = 0;
 	shell->env_list = NULL;
 	if (!fill_env_list(&shell->env_list, environ))
 	{

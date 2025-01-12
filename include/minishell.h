@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 10:54:50 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 10:49:55 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:10:01 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,10 @@ typedef struct s_shell
 	int				stdin;
 	int				stdout;
 	char			*processed_input;
-	int				exit_status;
 	int				redir_needed;
 }					t_shell;
+
+extern int			g_exit_status;
 
 // ***************** UTILS *****************
 
@@ -106,22 +107,18 @@ char				*resolve_command_path(char *command, t_env *env_list);
 
 // ***************** BUILTINS *****************
 
-void				ft_pwd(t_shell *shell);
+void				ft_pwd(void);
 void				ft_env(t_env *env_list);
 void				ft_unset(t_env **env_list, char *key);
 char				*ft_strndup(const char *src, size_t n);
-void				ft_exit(t_node **current, t_shell *shell);
+void				ft_exit(t_node **current);
 void				ft_cd(t_node **current, t_env *env_list);
-int					ft_echo(t_node *syntax_list, t_shell *shell);
-void				handle_export(t_node *current, t_env **env_list,
-						t_shell *shell);
+int					ft_echo(t_node *syntax_list);
+void				handle_export(t_node *current, t_env **env_list);
 void				ft_export(t_env **env_list, char *key, char *value);
 
 // ***************** REDIRECTIONS *****************
 
-int					input_redir(t_node *current);
-int					append_redir(t_node *current);
-int					output_redir(t_node *current);
 int					heredoc_redir(t_node *current);
 int					handle_redir(t_node *list_syntax);
 

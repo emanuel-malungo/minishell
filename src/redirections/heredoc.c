@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input_redir.c                                      :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/11 22:18:15 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 07:17:30 by emalungo         ###   ########.fr       */
+/*   Created: 2025/01/12 12:13:25 by emalungo          #+#    #+#             */
+/*   Updated: 2025/01/12 12:18:42 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	input_redir(t_node *current)
-{
-	int	fd;
-
-	fd = open(current->next->value, O_RDONLY);
-	if (fd == -1)
-	{
-		perror("minishell");
-		return (1);
-	}
-	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		perror("dup2 failed");
-		close(fd);
-		return (1);
-	}
-	close(fd);
-	return (0);
-}
 
 int	heredoc_redir(t_node *current)
 {
@@ -58,7 +38,7 @@ int	heredoc_redir(t_node *current)
 			free(line);
 			break ;
 		}
-		write(pipefd[1], line, strlen(line));
+		write(pipefd[1], line, ft_strlen(line));
 		write(pipefd[1], "\n", 1);
 		free(line);
 	}

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 18:22:12 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:39:38 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:09:48 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ void	handle_command(t_node **current, t_shell *shell)
 		return ;
 	}
 	if (strcmp((*current)->value, "exit") == 0)
-		ft_exit(current, shell);
+		ft_exit(current);
 	else if (ft_strcmp((*current)->value, "cd") == 0)
 		ft_cd(current, shell->env_list);
 	else if (ft_strcmp((*current)->value, "pwd") == 0)
-		ft_pwd(shell);
+		ft_pwd();
 	else if (ft_strcmp((*current)->value, "export") == 0)
-		handle_export((*current)->next, &shell->env_list, shell);
+		handle_export((*current)->next, &shell->env_list);
 	else if (ft_strcmp((*current)->value, "env") == 0)
 		ft_env(shell->env_list);
 	else if (ft_strcmp((*current)->value, "echo") == 0)
-		ft_echo(*current, shell);
+		ft_echo(*current);
 	else if (ft_strcmp((*current)->value, "unset") == 0)
 	{
 		arg_node = (*current)->next;

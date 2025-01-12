@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 19:56:04 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:44:47 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:09:39 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,12 @@ int	is_valid_identifier(char *key)
 	return (1);
 }
 
-void	process_export_variable(t_env **env_list, char *key, char *value,
-		t_shell *shell)
+void	process_export_variable(t_env **env_list, char *key, char *value)
 {
 	if (!is_valid_identifier(key))
 	{
 		printf("export: '%s': not a valid identifier\n", key);
-		shell->exit_status = 1;
+		g_exit_status = 1;
 		free(key);
 		free(value);
 		return ;
@@ -89,12 +88,12 @@ void	print_all_exports(t_env *env_list)
 	}
 }
 
-void	handle_export(t_node *current, t_env **env_list, t_shell *shell)
+void	handle_export(t_node *current, t_env **env_list)
 {
 	char	*name;
 	char	*value;
 
-	shell->exit_status = 0;
+	g_exit_status = 0;
 	if (!current || !current->value)
 	{
 		print_all_exports(*env_list);
@@ -102,8 +101,8 @@ void	handle_export(t_node *current, t_env **env_list, t_shell *shell)
 	}
 	if (!extract_name_value(current->value, &name, &value))
 	{
-		shell->exit_status = 1;
+		g_exit_status = 1;
 		return ;
 	}
-	process_export_variable(env_list, name, value, shell);
+	process_export_variable(env_list, name, value);
 }

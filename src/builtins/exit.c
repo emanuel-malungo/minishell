@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:45:54 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:05:27 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ int	is_within_int_limits(const char *str)
 	return (1);
 }
 
-void	check_exit_args(t_node *current, int *arg_count, int *exit_code,
-		t_shell *shell)
+void	check_exit_args(t_node *current, int *arg_count, int *exit_code)
 {
 	t_node	*temp;
 
@@ -54,7 +53,7 @@ void	check_exit_args(t_node *current, int *arg_count, int *exit_code,
 			if (!is_within_int_limits(temp->value))
 			{
 				printf("exit\n");
-				shell->exit_status = 1;
+				g_exit_status = 1;
 				printf("minishell: exit: %s: numeric argument required\n",
 					temp->value);
 				exit(EXIT_FAILURE);
@@ -65,7 +64,7 @@ void	check_exit_args(t_node *current, int *arg_count, int *exit_code,
 	}
 }
 
-void	ft_exit(t_node **current, t_shell *shell)
+void	ft_exit(t_node **current)
 {
 	int	arg_count;
 	int	exit_code;
@@ -75,14 +74,14 @@ void	ft_exit(t_node **current, t_shell *shell)
 	if (!current || !(*current))
 	{
 		printf("exit\n");
-		shell->exit_status = 1;
+		g_exit_status = 1;
 		exit(0);
 	}
-	check_exit_args(*current, &arg_count, &exit_code, shell);
+	check_exit_args(*current, &arg_count, &exit_code);
 	if (arg_count > 1)
 	{
 		printf("exit\n");
-		shell->exit_status = 1;
+		g_exit_status = 1;
 		printf("minishell: exit: too many arguments\n");
 		return ;
 	}

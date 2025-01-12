@@ -6,13 +6,13 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 18:33:42 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:22:25 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:02:47 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	execute_command(t_exec *exec, char *resolved_path, t_shell *shell)
+static void	execute_command(t_exec *exec, char *resolved_path)
 {
 	int	status;
 
@@ -34,11 +34,11 @@ static void	execute_command(t_exec *exec, char *resolved_path, t_shell *shell)
 	{
 		waitpid(exec->pid, &status, 0);
 		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
+			g_exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			shell->exit_status = 128 + WTERMSIG(status);
+			g_exit_status = 128 + WTERMSIG(status);
 		else
-			shell->exit_status = 1;
+			g_exit_status = 1;
 	}
 }
 
@@ -119,7 +119,7 @@ void	exec_ext_cmd(t_node *list_syntax, t_shell *shell)
 	exec = init_exec();
 	if (!exec)
 		return ;
-	shell->exit_status = 0;
+	g_exit_status = 0;
 	exec->command = list_syntax->value;
 	exec->argv = prepare_argv(list_syntax);
 	exec->envp = convert_env_list_to_array(shell->env_list);
@@ -127,8 +127,8 @@ void	exec_ext_cmd(t_node *list_syntax, t_shell *shell)
 	if (!resolved_path)
 	{
 		fprintf(stderr, "minishell: %s: command not found\n", exec->command);
-		shell->exit_status = 127;
+		g_exit_status = 127;
 		return ;
 	}
-	execute_command(exec, resolved_path, shell);
+	execute_command(exec, resolved_path);
 }

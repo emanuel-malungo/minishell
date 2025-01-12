@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:43:18 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 21:57:58 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 13:00:32 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	handle_exit_status(t_shell *shell, size_t *j)
 {
 	char	*exit_status_str;
 
-	exit_status_str = ft_itoa(shell->exit_status);
+	exit_status_str = ft_itoa(g_exit_status);
 	if (!exit_status_str)
 		return (0);
 	strcpy(shell->result + (*j), exit_status_str);

@@ -26,8 +26,7 @@ SRCS = $(SRC_DIR)/minishell.c \
 	   $(SRC_DIR)/builtins/export.c \
 	   $(SRC_DIR)/builtins/export_utils.c \
 	   $(SRC_DIR)/redirections/redirections.c \
-	   $(SRC_DIR)/redirections/input_redir.c \
-	   $(SRC_DIR)/redirections/output_redir.c \
+	   $(SRC_DIR)/redirections/heredoc.c \
 	   $(SRC_DIR)/redirections/pipe.c
 
 LIBFT = $(LIBFT_DIR)/libft.a

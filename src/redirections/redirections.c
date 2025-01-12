@@ -6,11 +6,71 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 22:06:15 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:47:31 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 12:19:32 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static int	append_redir(t_node *current)
+{
+	int	fd;
+
+	fd = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		perror("minishell");
+		return (1);
+	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("minishell");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	output_redir(t_node *current)
+{
+	int	fd;
+
+	fd = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		perror("minishell");
+		return (1);
+	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("dup2 failed");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	input_redir(t_node *current)
+{
+	int	fd;
+
+	fd = open(current->next->value, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("minishell");
+		return (1);
+	}
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2 failed");
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
 
 int	handle_redir(t_node *list_syntax)
 {
@@ -19,14 +79,14 @@ int	handle_redir(t_node *list_syntax)
 	current = list_syntax;
 	while (current != NULL)
 	{
-		if (current->type && ft_strcmp(current->type, "<") == 0)
+		if (current->type && ft_strcmp(current->type, ">") == 0)
+			output_redir(current);
+		else if (current->type && ft_strcmp(current->type, "<") == 0)
 			input_redir(current);
-		else if (current->type && ft_strcmp(current->type, "<<") == 0)
-			heredoc_redir(current);
 		else if (current->type && ft_strcmp(current->type, ">>") == 0)
 			append_redir(current);
-		else if (current->type && ft_strcmp(current->type, ">") == 0)
-			output_redir(current);
+		else if (current->type && ft_strcmp(current->type, "<<") == 0)
+			heredoc_redir(current);
 		current = current->next;
 	}
 	return (1);

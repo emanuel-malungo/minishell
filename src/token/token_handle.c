@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 14:55:47 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:50:22 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 12:09:31 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ void	handle_operator_token(t_token *token, char *input)
 
 	operator_len = 1;
 	i = token->i;
-	if ((input[i] == '|' && input[i + 1] == '|') || (input[i] == '>' && input[i
-			+ 1] == '>') || (input[i] == '<' && input[i + 1] == '<'))
+	if ((input[i] == '|' && input[i + 1] == '|')
+		|| (input[i] == '>' && input[i + 1] == '>')
+		|| (input[i] == '<' && input[i + 1] == '<'))
 	{
 		operator_len = 2;
 	}
