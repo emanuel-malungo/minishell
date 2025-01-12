@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 10:58:07 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 13:34:36 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:29:44 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,10 @@ void	handle_signal(int sig)
 	if (sig == SIGINT)
 	{
 		g_exit_status = 130;
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		write(STDOUT_FILENO, "\n", 1);
-		rl_redisplay();
+		printf("minishell$> \n");
 	}
 	else if (sig == SIGQUIT)
-	{
-	}
+		return ;
 }
 
 int	main(int argc, char **argv, char **environ)

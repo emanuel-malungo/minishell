@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 19:56:04 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 13:09:39 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 16:34:10 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,15 @@ void	handle_export(t_node *current, t_env **env_list)
 		print_all_exports(*env_list);
 		return ;
 	}
-	if (!extract_name_value(current->value, &name, &value))
+	while (current)
 	{
-		g_exit_status = 1;
-		return ;
+		if (!extract_name_value(current->value, &name, &value))
+		{
+			g_exit_status = 1;
+			current = current->next;
+			continue;
+		}
+		process_export_variable(env_list, name, value);
+		current = current->next;
 	}
-	process_export_variable(env_list, name, value);
 }

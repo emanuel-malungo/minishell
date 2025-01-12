@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 11:16:25 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 13:34:29 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 15:36:36 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,6 @@ t_shell	*init_shell(char **environ)
 	return (shell);
 }
 
-
-
-
 int	process_input(t_shell *shell)
 {
 	shell->processed_input = expand_variable(shell);
@@ -109,25 +106,5 @@ int	process_input(t_shell *shell)
 	shell->list_syntax = syntax_analysis(shell->tokens);
 	if (!shell->list_syntax)
 		return (0);
-	// has_redirection(shell);
-	// if (shell->redir_needed)
-	// {
-	// 	shell->stdin = dup(STDIN_FILENO);
-	// 	shell->stdout = dup(STDOUT_FILENO);
-	// 	if (shell->stdin == -1 || shell->stdout == -1)
-	// 	{
-	// 		perror("dup failed");
-	// 		return (0);
-	// 	}
-	// 	handle_redir(shell->list_syntax);
-	// }
-	// exc_all_cmds(shell);
-	// if (shell->redir_needed)
-	// {
-	// 	dup2(shell->stdin, STDIN_FILENO);
-	// 	dup2(shell->stdout, STDOUT_FILENO);
-	// 	close(shell->stdin);
-	// 	close(shell->stdout);
-	// }
 	return (1);
 }
