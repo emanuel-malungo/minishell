@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 11:16:25 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/12 11:24:26 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:31:13 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ void	print_list(t_node *node)
 	}
 }
 
-
 void	has_redirection(t_shell *shell)
 {
 	t_node	*current;
@@ -141,7 +140,8 @@ void	has_redirection(t_shell *shell)
 int	process_input(t_shell *shell)
 {
 	shell->processed_input = expand_variable(shell);
-	if (shell->processed_input == NULL || ft_strlen(shell->processed_input) == 0)
+	if (shell->processed_input == NULL
+		|| ft_strlen(shell->processed_input) == 0)
 	{
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 18:22:12 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 20:39:40 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:39:38 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	handle_command(t_node **current, t_shell *shell)
 {
+	t_node	*arg_node;
+
 	if (!current || !*current || !(*current)->value)
 	{
 		perror("Error: invalid node in handle_command\n");
@@ -33,10 +35,20 @@ void	handle_command(t_node **current, t_shell *shell)
 		ft_echo(*current, shell);
 	else if (ft_strcmp((*current)->value, "unset") == 0)
 	{
-		if ((*current)->next && (*current)->next->value)
-			ft_unset(&shell->env_list, (*current)->next->value);
+		arg_node = (*current)->next;
+		if (arg_node)
+		{
+			while (arg_node)
+			{
+				if (arg_node->value)
+					ft_unset(&shell->env_list, arg_node->value);
+				arg_node = arg_node->next;
+			}
+		}
 		else
+		{
 			printf("unset: not enough arguments\n");
+		}
 	}
 	else
 		exec_ext_cmd(*current, shell);

@@ -6,7 +6,7 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 15:24:10 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 20:50:53 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/12 11:41:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,4 @@ void	ft_unset(t_env **env_list, char *key)
 		prev = current;
 		current = current->next;
 	}
-	printf("unset: %s not found\n", key);
 }
