@@ -5,108 +5,172 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 10:23:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/06 16:48:35 by emalungo         ###   ########.fr       */
+/*   Created: 2024/12/14 11:16:25 by emalungo          #+#    #+#             */
+/*   Updated: 2025/01/12 11:24:26 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../include/minishell.h"
 
-void	add_node_sorted(t_env_node **head, t_env_node *new_node)
+static t_env	*create_new_node_env(char *key, char *value)
 {
-	t_env_node	*current;
-	t_env_node	*prev;
+	t_env	*new_node;
 
-	if (!*head || ft_strcmp(new_node->name, (*head)->name) < 0)
-	{
-		new_node->next = *head;
-		*head = new_node;
-		return ;
-	}
-	current = *head;
-	prev = NULL;
-	while (current && ft_strcmp(new_node->name, current->name) > 0)
-	{
-		prev = current;
-		current = current->next;
-	}
-	prev->next = new_node;
-	new_node->next = current;
-}
-
-t_env_node	*create_env_node(char *name, char *value)
-{
-	t_env_node	*new_node;
-
-	new_node = malloc(sizeof(t_env_node));
-	if (name)
-		new_node->name = ft_strdup(name);
-	else
-		new_node->name = ft_strdup("");
-	if (value)
-		new_node->value = ft_strdup(value);
-	else
-		new_node->value = ft_strdup("");
-	new_node->next = NULL;
-	if (!new_node->name || !new_node->value)
-	{
-		perror("strdup failed");
-		free(new_node->name);
-		free(new_node->value);
-		free(new_node);
+	new_node = (t_env *)malloc(sizeof(t_env));
+	if (!new_node)
 		return (NULL);
-	}
+	new_node->key = ft_strdup(key);
+	new_node->value = ft_strdup(value);
+	new_node->next = NULL;
 	return (new_node);
 }
 
-void	fill_env_list(char **env, t_env_node **env_list)
+static int	add_env_node(t_env **env_list, char *key, char *value)
 {
-	t_env_node	*new_node;
-	char		*env_copy;
-	char		*name;
-	char		*value;
-	int			i;
+	t_env	*new_node;
+	t_env	*temp;
 
-	*env_list = NULL;
-	i = 0;
-	while (env[i])
+	new_node = create_new_node_env(key, value);
+	if (!new_node)
+		return (0);
+	if (*env_list == NULL)
+		*env_list = new_node;
+	else
 	{
-		env_copy = ft_strdup(env[i]);
-		if (!env_copy)
+		temp = *env_list;
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new_node;
+	}
+	return (1);
+}
+
+static int	fill_env_list(t_env **env_list, char **environ)
+{
+	int		i;
+	char	*key;
+	char	*value;
+	char	*temp;
+
+	i = 0;
+	while (environ[i])
+	{
+		temp = ft_strdup(environ[i]);
+		if (!temp)
+			return (0);
+		key = strtok(temp, "=");
+		value = strtok(NULL, "=");
+		if (!key || !value)
 		{
-			perror("strdup failed");
-			return ;
+			free(temp);
+			i++;
+			continue ;
 		}
-		name = ft_strtok(env_copy, "=");
-		value = ft_strtok(NULL, "=");
-		new_node = create_env_node(name, value);
-		free(env_copy);
-		if (!new_node)
-			return ;
-		add_node_sorted(env_list, new_node);
+		add_env_node(env_list, key, value);
+		free(temp);
+		i++;
+	}
+	return (1);
+}
+
+t_shell	*init_shell(char **environ)
+{
+	t_shell	*shell;
+
+	shell = (t_shell *)malloc(sizeof(t_shell));
+	if (!shell)
+		return (NULL);
+	shell->input = NULL;
+	shell->exit_status = 0;
+	shell->env_list = NULL;
+	if (!fill_env_list(&shell->env_list, environ))
+	{
+		free(shell);
+		return (NULL);
+	}
+	return (shell);
+}
+
+void	print_tokens(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	if (!tokens)
+	{
+		printf("No tokens to display.\n");
+		return ;
+	}
+	while (tokens[i])
+	{
+		printf("Token[%d]: %s\n", i, tokens[i]);
 		i++;
 	}
 }
 
-t_bash	*init_bash(void)
+void	print_list(t_node *node)
 {
-	t_bash		*bash;
-	extern char	**environ;
+	while (node)
+	{
+		printf("Node type: %s, value: %s\n", node->type, node->value);
+		node = node->next;
+	}
+}
 
-	bash = malloc(sizeof(t_bash));
-	if (!bash)
+
+void	has_redirection(t_shell *shell)
+{
+	t_node	*current;
+
+	current = shell->list_syntax;
+	shell->redir_needed = 0;
+	while (current != NULL)
 	{
-		perror("malloc failed");
-		return (NULL);
+		if (ft_strcmp(current->type, "<") == 0 || ft_strcmp(current->type,
+				"<<") == 0 || ft_strcmp(current->type, ">>") == 0
+			|| ft_strcmp(current->type, ">") == 0 || ft_strcmp(current->type,
+				"pipe") == 0)
+		{
+			shell->redir_needed = 1;
+			break ;
+		}
+		current = current->next;
 	}
-	ft_memset(bash, 0, sizeof(t_bash));
-	bash->exit_status = 0;
-	if (!environ || !*environ)
+}
+
+int	process_input(t_shell *shell)
+{
+	shell->processed_input = expand_variable(shell);
+	if (shell->processed_input == NULL || ft_strlen(shell->processed_input) == 0)
 	{
-		perror("Environment is empty or NULL");
-		bash->env_list = NULL;
-		return (bash);
+		return (1);
 	}
-	fill_env_list(environ, &bash->env_list);
-	return (bash);
+	if (!shell->processed_input)
+		return (0);
+	free(shell->input);
+	shell->tokens = tokenizer(shell->processed_input);
+	shell->list_syntax = syntax_analysis(shell->tokens);
+	if (!shell->list_syntax)
+		return (0);
+	has_redirection(shell);
+	if (shell->redir_needed)
+	{
+		shell->stdin = dup(STDIN_FILENO);
+		shell->stdout = dup(STDOUT_FILENO);
+		if (shell->stdin == -1 || shell->stdout == -1)
+		{
+			perror("dup failed");
+			return (0);
+		}
+		handle_redir(shell->list_syntax);
+	}
+	exc_all_cmds(shell);
+	if (shell->redir_needed)
+	{
+		dup2(shell->stdin, STDIN_FILENO);
+		dup2(shell->stdout, STDOUT_FILENO);
+		close(shell->stdin);
+		close(shell->stdout);
+	}
+	return (1);
 }

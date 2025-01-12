@@ -6,15 +6,15 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:30:58 by emalungo          #+#    #+#             */
-/*   Updated: 2024/11/22 08:04:56 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/11 20:48:30 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../include/minishell.h"
 
-void	ft_env(t_env_node *env_list)
+void	ft_env(t_env *env_list)
 {
-	t_env_node	*current;
+	t_env	*current;
 
 	if (!env_list)
 	{
@@ -25,9 +25,9 @@ void	ft_env(t_env_node *env_list)
 	while (current)
 	{
 		if (current->value)
-			printf("%s=%s\n", current->name, current->value);
+			printf("%s=%s\n", current->key, current->value);
 		else
-			printf("%s\n", current->name);
+			printf("%s\n", current->key);
 		current = current->next;
 	}
 }

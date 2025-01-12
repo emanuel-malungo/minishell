@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:26:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/06 16:15:23 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/11 20:43:46 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../include/minishell.h"
 
 int	is_within_int_limits(const char *str)
 {
@@ -28,9 +28,9 @@ int	is_within_int_limits(const char *str)
 	while (*str >= '0' && *str <= '9')
 	{
 		result = result * 10 + (*str - '0');
-		if (sign >= 1 && result > INT_MAX)
+		if (sign >= 1 && result > LONG_MAX)
 			return (0);
-		if (sign == -1 && (-result) < INT_MIN)
+		if (sign == -1 && (-result) < LONG_MIN)
 			return (0);
 		str++;
 	}
@@ -39,7 +39,7 @@ int	is_within_int_limits(const char *str)
 	return (1);
 }
 
-void	check_exit_args(t_node *current, int *arg_count, int *exit_code, t_bash *bash)
+void	check_exit_args(t_node *current, int *arg_count, int *exit_code, t_shell *shell)
 {
 	t_node	*temp;
 
@@ -53,7 +53,7 @@ void	check_exit_args(t_node *current, int *arg_count, int *exit_code, t_bash *ba
 			if (!is_within_int_limits(temp->value))
 			{
 				printf("exit\n");
-				bash->exit_status = 1;
+				shell->exit_status = 1;
 				printf("minishell: exit: %s: numeric argument required\n",
 					temp->value);
 				exit(EXIT_FAILURE);
@@ -64,7 +64,7 @@ void	check_exit_args(t_node *current, int *arg_count, int *exit_code, t_bash *ba
 	}
 }
 
-void	ft_exit(t_node **current, t_bash *bash)
+void	ft_exit(t_node **current, t_shell *shell)
 {
 	int	arg_count;
 	int	exit_code;
@@ -74,14 +74,14 @@ void	ft_exit(t_node **current, t_bash *bash)
 	if (!current || !(*current))
 	{
 		printf("exit\n");
-		bash->exit_status = 1;
+		shell->exit_status = 1;
 		exit(0);
 	}
-	check_exit_args(*current, &arg_count, &exit_code, bash);
+	check_exit_args(*current, &arg_count, &exit_code, shell);
 	if (arg_count > 1)
 	{
 		printf("exit\n");
-		bash->exit_status = 1;
+		shell->exit_status = 1;
 		printf("minishell: exit: too many arguments\n");
 		return ;
 	}

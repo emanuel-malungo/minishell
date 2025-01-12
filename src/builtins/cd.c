@@ -6,11 +6,11 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:16:30 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/04 13:53:09 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/11 20:47:49 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../include/minishell.h"
 
 int	is_valid_cd_arguments(t_node *current)
 {
@@ -57,7 +57,7 @@ void	do_cd(char *path)
 	free(cwd);
 }
 
-void	ft_cd(t_node **current, t_env_node *env_list)
+void	ft_cd(t_node **current, t_env *env_list)
 {
 	char	*path;
 
@@ -67,7 +67,7 @@ void	ft_cd(t_node **current, t_env_node *env_list)
 	if ((*current)->next && ft_strcmp((*current)->next->type, "argument") == 0)
 		path = (*current)->next->value;
 	else
-		path = get_env_value("HOME", env_list);
+		path = get_value_env(env_list, "HOME");
 	if (!path)
 	{
 		printf("cd: HOME not set\n");

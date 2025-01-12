@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_all.c                                         :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 09:12:11 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 11:20:18 by emalungo         ###   ########.fr       */
+/*   Created: 2025/01/11 18:22:12 by emalungo          #+#    #+#             */
+/*   Updated: 2025/01/11 20:39:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../include/minishell.h"
 
-
-void	handle_command(t_node **current, t_bash *bash)
+void	handle_command(t_node **current, t_shell *shell)
 {
 	if (!current || !*current || !(*current)->value)
 	{
@@ -21,38 +20,38 @@ void	handle_command(t_node **current, t_bash *bash)
 		return ;
 	}
 	if (strcmp((*current)->value, "exit") == 0)
-		ft_exit(current, bash);
+		ft_exit(current, shell);
 	else if (ft_strcmp((*current)->value, "cd") == 0)
-		ft_cd(current, bash->env_list);
+		ft_cd(current, shell->env_list);
 	else if (ft_strcmp((*current)->value, "pwd") == 0)
-		ft_pwd(bash);
+		ft_pwd(shell);
 	else if (ft_strcmp((*current)->value, "export") == 0)
-		handle_export((*current)->next, &bash->env_list, bash);
+		handle_export((*current)->next, &shell->env_list, shell);
 	else if (ft_strcmp((*current)->value, "env") == 0)
-		ft_env(bash->env_list);
+		ft_env(shell->env_list);
 	else if (ft_strcmp((*current)->value, "echo") == 0)
-		ft_echo(*current, bash);
+		ft_echo(*current, shell);
 	else if (ft_strcmp((*current)->value, "unset") == 0)
 	{
 		if ((*current)->next && (*current)->next->value)
-			ft_unset(&bash->env_list, (*current)->next->value);
+			ft_unset(&shell->env_list, (*current)->next->value);
 		else
 			printf("unset: not enough arguments\n");
 	}
 	else
-		execute_external_command(*current, bash);
+		exec_ext_cmd(*current, shell);
 }
 
-void	exec_all_commands(t_bash *bash)
+void	exc_all_cmds(t_shell *shell)
 {
 	t_node	*temp;
 
-	if (!bash->syntax_list)
+	if (!shell->list_syntax)
 	{
 		perror("Error: syntax_list is NULL\n");
 		return ;
 	}
-	temp = bash->syntax_list;
+	temp = shell->list_syntax;
 	while (temp)
 	{
 		if (!temp->type || !temp->value)
@@ -61,7 +60,7 @@ void	exec_all_commands(t_bash *bash)
 			return ;
 		}
 		if (ft_strcmp(temp->type, "command") == 0)
-			handle_command(&temp, bash);
+			handle_command(&temp, shell);
 		temp = temp->next;
 	}
 }

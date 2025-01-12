@@ -5,40 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 17:38:54 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/08 14:23:10 by emalungo         ###   ########.fr       */
+/*   Created: 2024/12/14 10:58:07 by emalungo          #+#    #+#             */
+/*   Updated: 2025/01/12 02:20:40 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../include/minishell.h"
 
-void	print_list(t_node *node)
+int	main(int argc, char **argv, char **environ)
 {
-	while (node)
-	{
-		printf("Node type: %s, value: %s\n", node->type, node->value);
-		node = node->next;
-	}
-}
+	t_shell	*shell;
 
-int	main(void)
-{
-	t_bash	*bash;
-	char	*processed_input;
-
-	bash = init_bash();
-	while (1)
+	shell = init_shell(environ);
+	if (argc == 1)
 	{
-		bash->input = readline("minishell$> ");
-		if (!bash->input)
-			break ;
-		add_history(bash->input);
-		processed_input = expanded_input(bash->input, bash);
-		// printf("processed_input: %s\n", processed_input);
-		bash->tokens = tokenizer(processed_input);
-		bash->syntax_list = parse_tokens(bash->tokens);
-		exec_all_commands(bash);
-		free(bash->input);
+		while (1)
+		{
+			shell->input = readline("minishell$> ");
+			if (!shell->input)
+				break ;
+			add_history(shell->input);
+			if (!process_input(shell))
+				return (1);
+		}
+		return (0);
 	}
-	return (0);
+	printf("minishell: %s: No such file or directory\n", argv[1]);
+	return (1);
 }

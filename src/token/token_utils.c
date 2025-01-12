@@ -1,39 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:10 by emalungo          #+#    #+#             */
-/*   Updated: 2025/01/11 20:50:53 by emalungo         ###   ########.fr       */
+/*   Created: 2025/01/11 15:18:12 by emalungo          #+#    #+#             */
+/*   Updated: 2025/01/11 15:30:55 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_unset(t_env **env_list, char *key)
+char	*remove_quotes(char *str)
 {
-	t_env	*current;
-	t_env	*prev;
+	int		len;
+	int		j;
+	int		i;
+	char	*cleaned;
 
-	current = *env_list;
-	prev = NULL;
-	while (current)
+	i = -1;
+	len = ft_strlen(str);
+	cleaned = malloc(sizeof(char) * (len + 1));
+	if (!cleaned)
+		return (NULL);
+	j = 0;
+	while (++i < len)
 	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*env_list = current->next;
-			free(current->key);
-			free(current->value);
-			free(current);
-			return ;
-		}
-		prev = current;
-		current = current->next;
+		if (str[i] != '\'' && str[i] != '"')
+			cleaned[j++] = str[i];
 	}
-	printf("unset: %s not found\n", key);
+	cleaned[j] = '\0';
+	return (cleaned);
 }

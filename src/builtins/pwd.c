@@ -6,13 +6,13 @@
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 09:58:53 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 11:20:04 by emalungo         ###   ########.fr       */
+/*   Updated: 2025/01/11 20:48:57 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../include/minishell.h"
 
-void	ft_pwd(t_bash *bash)
+void	ft_pwd(t_shell *shell)
 {
 	char	*cwd;
 
@@ -20,10 +20,10 @@ void	ft_pwd(t_bash *bash)
 	if (cwd == NULL)
 	{
 		perror("pwd");
-		bash->exit_status = 1;
+		shell->exit_status = 1;
 		return ;
 	}
 	printf("%s\n", cwd);
 	free(cwd);
-	bash->exit_status = 0;
+	shell->exit_status = 0;
 }

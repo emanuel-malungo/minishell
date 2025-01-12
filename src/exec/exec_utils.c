@@ -1,32 +1,87 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_resolver.c                                    :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emalungo <emalungo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/22 14:36:15 by emalungo          #+#    #+#             */
-/*   Updated: 2024/12/07 12:14:47 by emalungo         ###   ########.fr       */
+/*   Created: 2025/01/11 18:51:15 by emalungo          #+#    #+#             */
+/*   Updated: 2025/01/12 08:13:28 by emalungo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../include/minishell.h"
 
-static char	*find_path_env(t_env_node *env_list)
+t_exec	*init_exec(void)
 {
-	t_env_node	*tmp;
+	t_exec	*exec;
+
+	exec = (t_exec *)malloc(sizeof(t_exec));
+	if (!exec)
+		return (NULL);
+	exec->argv = NULL;
+	exec->envp = NULL;
+	exec->command = NULL;
+	return (exec);
+}
+
+int	is_redirection(t_node *node)
+{
+	if (ft_strcmp(node->type, "<") == 0)
+		return (0);
+	if (ft_strcmp(node->type, "<<") == 0)
+		return (0);
+	if (ft_strcmp(node->type, ">") == 0)
+		return (0);
+	if (ft_strcmp(node->type, ">>") == 0)
+		return (0);
+	if (ft_strcmp(node->type, "|") == 0)
+		return (0);
+	return (1);
+}
+
+int	count_valid_args(t_node *list_syntax)
+{
+	int	count;
+
+	count = 0;
+	while (list_syntax)
+	{
+		if (list_syntax->value != NULL)
+			count++;
+		list_syntax = list_syntax->next;
+	}
+	return (count);
+}
+
+int	get_size_env_args(t_env *arg_env)
+{
+	int	count;
+
+	count = 0;
+	while (arg_env)
+	{
+		count++;
+		arg_env = arg_env->next;
+	}
+	return (count);
+}
+
+char	*find_path_env(t_env *env_list)
+{
+	t_env	*tmp;
 
 	tmp = env_list;
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->name, "PATH") == 0)
+		if (ft_strcmp(tmp->key, "PATH") == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}
 	return (NULL);
 }
 
-static char	*try_resolve_command(const char *command, const char *directory)
+char	*try_resolve_command(char *command, char *directory)
 {
 	char	*command_path;
 
@@ -40,7 +95,7 @@ static char	*try_resolve_command(const char *command, const char *directory)
 	return (NULL);
 }
 
-char	*resolve_command_path(const char *command, t_env_node *env_list)
+char	*resolve_command_path(char *command, t_env *env_list)
 {
 	char	*path_env;
 	char	**directories;
@@ -69,37 +124,4 @@ char	*resolve_command_path(const char *command, t_env_node *env_list)
 	}
 	free(directories);
 	return (command_path);
-}
-
-char	**convert_env_list_to_array(t_env_node *env_list)
-{
-	int			count;
-	t_env_node	*tmp;
-	char		**envp;
-	int			i;
-
-	count = 0;
-	tmp = env_list;
-	envp = NULL;
-	i = 0;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	envp = malloc(sizeof(char *) * (count + 1));
-	if (!envp)
-		return (NULL);
-	tmp = env_list;
-	while (tmp)
-	{
-		envp[i] = malloc(strlen(tmp->name) + strlen(tmp->value) + 2);
-		if (!envp[i])
-			break ;
-		sprintf(envp[i], "%s=%s", tmp->name, tmp->value);
-		tmp = tmp->next;
-		i++;
-	}
-	envp[i] = NULL;
-	return (envp);
 }

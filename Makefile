@@ -8,24 +8,27 @@ INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)/include
 CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
 
 SRCS = $(SRC_DIR)/minishell.c \
-       $(SRC_DIR)/utils/utils.c \
-       $(SRC_DIR)/utils/utils_expand.c \
-       $(SRC_DIR)/utils/utils_export.c \
-       $(SRC_DIR)/utils/utils_parse.c \
-       $(SRC_DIR)/utils/utils_lib.c \
-       $(SRC_DIR)/builtins/cd.c \
-       $(SRC_DIR)/builtins/pwd.c \
-       $(SRC_DIR)/builtins/echo.c \
-       $(SRC_DIR)/builtins/unset.c \
-       $(SRC_DIR)/builtins/env.c \
-       $(SRC_DIR)/builtins/exit.c \
-       $(SRC_DIR)/builtins/export.c \
-       $(SRC_DIR)/parse/parse.c \
-       $(SRC_DIR)/token/handle.c \
-       $(SRC_DIR)/token/token.c \
-       $(SRC_DIR)/exec/exec_all.c \
-       $(SRC_DIR)/exec/exec_cmd.c \
-       $(SRC_DIR)/exec/path_resolver.c 
+	   $(SRC_DIR)/utils/utils.c \
+	   $(SRC_DIR)/utils/parse.c \
+	   $(SRC_DIR)/utils/expand_variable.c \
+	   $(SRC_DIR)/token/token.c \
+	   $(SRC_DIR)/token/token_handle.c \
+	   $(SRC_DIR)/token/token_utils.c \
+	   $(SRC_DIR)/exec/exec.c \
+	   $(SRC_DIR)/exec/exc_ext_cmd.c \
+	   $(SRC_DIR)/exec/exec_utils.c \
+	   $(SRC_DIR)/builtins/exit.c \
+	   $(SRC_DIR)/builtins/cd.c \
+	   $(SRC_DIR)/builtins/env.c \
+	   $(SRC_DIR)/builtins/pwd.c \
+	   $(SRC_DIR)/builtins/echo.c \
+	   $(SRC_DIR)/builtins/unset.c \
+	   $(SRC_DIR)/builtins/export.c \
+	   $(SRC_DIR)/builtins/export_utils.c \
+	   $(SRC_DIR)/redirections/redirections.c \
+	   $(SRC_DIR)/redirections/input_redir.c \
+	   $(SRC_DIR)/redirections/output_redir.c \
+	   $(SRC_DIR)/redirections/pipe.c
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
